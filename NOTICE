@@ -1,0 +1,48 @@
+korean-review
+Copyright (c) 2026 carbonsteward
+
+This product bundles thin CLI wrappers around, and depends on, third-party
+software and data. Each component retains its own license and attribution.
+The wrappers in bin/ and the Agent Skill (SKILL.md) are the only original
+work in this repository and are MIT-licensed (see LICENSE).
+
+================================================================================
+1. Kollocate  —  collocation engine (wrapped by bin/kollocate)
+================================================================================
+  Author:   Kyubyong Park <kbpark.linguist@gmail.com>
+  Source:   https://github.com/Kyubyong/kollocate
+  License:  Apache License 2.0
+  Note:     Collocation statistics are derived from the Sejong Corpus,
+            published by the National Institute of Korean Language (국립국어원).
+
+================================================================================
+2. Korpora  —  Korean corpora loader (wrapped by bin/korpora-search)
+================================================================================
+  Author:   ko-nlp
+  Source:   https://github.com/ko-nlp/Korpora
+  License:  Creative Commons Attribution 4.0 (CC-BY-4.0)
+            (per the project's own LICENSE/README; note the PyPI package metadata
+            for Korpora 0.2.0 lists no license field, so tools may report "UNKNOWN")
+  Note:     The Korpora PACKAGE is CC-BY-4.0. Each individual corpus it
+            downloads (NSMC, Korean Petitions, KcBERT, etc.) carries its OWN
+            license — verify the corpus license before redistribution or
+            commercial use.
+
+================================================================================
+3. National Institute of Korean Language (국립국어원) Open API dictionaries
+   (queried by bin/krdict — no data is bundled, only API calls at runtime)
+================================================================================
+  - 표준국어대사전  Standard Korean Dictionary   https://stdict.korean.go.kr
+  - 우리말샘        Urimalsaem (open dictionary)  https://opendict.korean.go.kr
+  - 한국어기초사전  Korean Learners' Dictionary   https://krdict.korean.go.kr
+
+  These are public Open API services operated by 국립국어원. Each requires the
+  end user to register and obtain their OWN free authentication key. This
+  project ships NO keys and stores NO dictionary data; it only formats the
+  responses returned to the user's own key at runtime. Dictionary content is
+  © National Institute of Korean Language and subject to its terms of use.
+
+================================================================================
+Trademarks and dictionary/corpus content remain the property of their
+respective owners. This project is not affiliated with or endorsed by the
+National Institute of Korean Language, Kyubyong Park, or ko-nlp.

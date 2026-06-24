@@ -1,0 +1,21 @@
+{
+  "name": "jjakmal",
+  "owner": {
+    "name": "carbonsteward",
+    "url": "https://github.com/carbonsteward"
+  },
+  "metadata": {
+    "description": "짝말 (jjakmal) — Korean collocation & naturalness verification, backed by corpus + dictionary evidence.",
+    "version": "0.0.1"
+  },
+  "plugins": [
+    {
+      "name": "jjakmal",
+      "source": "./",
+      "description": "짝말 — evidence-based Korean naturalness & collocation verification (CLIs + skill + commands + subagents).",
+      "version": "0.0.1",
+      "author": { "name": "carbonsteward" },
+      "keywords": ["korean", "nlp", "collocation", "naturalness", "linguistics", "jjakmal", "짝말"]
+    }
+  ]
+}

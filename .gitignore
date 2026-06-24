@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Korpora downloads (large, user-fetched)
+Korpora/
+*.zip
+
+# OS / editor
+.DS_Store
+*.swp
+.idea/
+.vscode/
+
+# Never commit secrets
+.env
+*.key
+
+# stray session/hook logs
+logs/

@@ -1,0 +1,74 @@
+#!/usr/bin/env python3
+"""kollocate — Korean collocation CLI wrapper (Sejong corpus 기반)
+
+사용:
+  kollocate <어간>             해당 어간이 공기(共起)하는 단어 + 빈도
+  kollocate <어간> --json      JSON 출력
+  kollocate <어간> --top 5     POS 그룹별 상위 N (기본 8)
+
+입력 규칙:
+  동사·형용사는 어미를 제거하고 어간만 입력 (예: 먹다 → 먹, 활성화하다 → 활성화)
+  명사는 그대로 (예: 활성화, 뒷받침, 토대)
+
+출력:
+  대상 단어의 POS × collocate POS × (collocate, 빈도) 매트릭스
+"""
+import argparse
+import json
+import sys
+import warnings
+
+warnings.filterwarnings("ignore", category=SyntaxWarning)
+
+try:
+    from kollocate import Kollocate
+except ImportError:
+    print("kollocate 패키지가 설치되지 않았습니다. pip install kollocate", file=sys.stderr)
+    sys.exit(2)
+
+
+POS_KO = {
+    "noun": "명사", "verb": "동사", "adverb": "부사",
+    "adjective": "형용사", "determiner": "관형사", "pronoun": "대명사",
+    "numeral": "수사", "particle": "조사", "exclamation": "감탄사",
+    "affix": "접사", "ending": "어미",
+}
+
+
+def main():
+    ap = argparse.ArgumentParser(description="한국어 연어(collocation) 검색")
+    ap.add_argument("word", help="대상 어간 (동사·형용사는 어미 제거 — 예: 먹다→먹)")
+    ap.add_argument("--top", type=int, default=8, help="POS 그룹별 상위 N (기본 8)")
+    ap.add_argument("--json", action="store_true", help="JSON 원본 출력")
+    args = ap.parse_args()
+
+    k = Kollocate()
+    try:
+        r = k(args.word)
+    except Exception as e:
+        print(f"오류: {e}", file=sys.stderr)
+        sys.exit(2)
+
+    if args.json:
+        print(json.dumps(r, ensure_ascii=False, indent=2))
+        return
+
+    if not r:
+        print(f"  (Sejong 코퍼스에 '{args.word}' 등장 없음)")
+        return
+
+    print(f"=== '{args.word}' 연어 ===")
+    for pos_target, by_collo_pos in r.items():
+        pos_tk = POS_KO.get(pos_target, pos_target)
+        print(f"\n[{pos_tk}]")
+        for pos_collo, items in by_collo_pos.items():
+            if not items:
+                continue
+            pos_ck = POS_KO.get(pos_collo, pos_collo)
+            top_items = items[:args.top]
+            line = ", ".join(f"{w}({n})" for w, n in top_items)
+            print(f"  ↳ {pos_ck}: {line}")
+
+
+if __name__ == "__main__":
+    main()

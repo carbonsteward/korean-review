@@ -1,0 +1,5 @@
+# korean-review Python dependencies
+# Install:  pip install -r requirements.txt
+kollocate>=0.0.2     # Sejong-corpus collocation engine (Kyubyong Park, Apache-2.0)
+Korpora>=0.2.0       # Korean corpora loader/concordance (ko-nlp, CC-BY-4.0)
+# whoosh is pulled in transitively by kollocate

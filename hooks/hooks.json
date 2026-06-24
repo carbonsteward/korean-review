@@ -1,0 +1,17 @@
+{
+  "description": "SessionStart: one-time reminder to install the CLI tools if missing. (The opt-in Korean-draft enforcement hooks in hooks/enforce-korean-*.sh are NOT registered here — enable them in your own settings.json; see README.)",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/bootstrap-cli.sh",
+            "timeout": 120
+          }
+        ]
+      }
+    ]
+  }
+}

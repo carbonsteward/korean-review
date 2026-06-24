@@ -1,0 +1,261 @@
+#!/usr/bin/env python3
+"""krdict — 표준국어대사전 / 우리말샘 / 한국어기초사전 CLI
+
+사용:
+  krdict <단어>                  표준국어대사전 (기본)
+  krdict -u <단어>               우리말샘 (신조어·전문용어 풍부)
+  krdict -k <단어>               한국어기초사전 (학습자용, 용례 풍부, 외국어 번역)
+  krdict -a <단어>               3개 사전 동시 검색
+  krdict <단어> --pos 1          품사 코드 필터 (1=명사, 2=대명사, ...)
+  krdict <단어> --method include 검색 방식 (exact|include|start|end|wildcard)
+  krdict <단어> --num 30         결과 개수 (10~100)
+  krdict <단어> --raw            원본 출력
+
+API 키 (환경변수):
+  KRDICT_STDICT_KEY   표준국어대사전 (https://stdict.korean.go.kr)
+  KRDICT_URIMAL_KEY   우리말샘 (https://opendict.korean.go.kr)
+  KRDICT_KBASE_KEY    한국어기초사전 (https://krdict.korean.go.kr)
+
+응답 필드: 표제어 / 품사 / 등급 / 뜻풀이 / 용례
+"""
+import argparse
+import json
+import os
+import sys
+import urllib.parse
+import urllib.request
+import xml.etree.ElementTree as ET
+
+STDICT_URL = "https://stdict.korean.go.kr/api/search.do"
+URIMAL_URL = "https://opendict.korean.go.kr/api/search"
+KBASE_URL = "https://krdict.korean.go.kr/api/search"
+
+POS_CODES = {
+    "0": "전체", "1": "명사", "2": "대명사", "3": "수사", "4": "조사",
+    "5": "동사", "6": "형용사", "7": "관형사", "8": "부사", "9": "감탄사",
+    "10": "접사", "11": "의존명사", "12": "보조동사", "13": "보조형용사",
+    "14": "어미", "15": "품사 없음",
+}
+
+
+def fetch(url, params, as_xml=False):
+    qs = urllib.parse.urlencode(params)
+    req = urllib.request.Request(f"{url}?{qs}", headers={"User-Agent": "Mozilla/5.0 krdict-cli/0.2"})
+    try:
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            body = resp.read().decode("utf-8")
+            if as_xml:
+                return ET.fromstring(body)
+            return json.loads(body)
+    except urllib.error.HTTPError as e:
+        print(f"HTTP {e.code}: {e.reason}", file=sys.stderr)
+        sys.exit(2)
+    except Exception as e:
+        print(f"네트워크 오류: {e}", file=sys.stderr)
+        sys.exit(2)
+
+
+def render_examples(data, query, context=22, raw=False):
+    """우리말샘 part=exam 응답 — query 단어 주변 ±context 글자 추출 → collocation evidence."""
+    if raw:
+        print(json.dumps(data, ensure_ascii=False, indent=2))
+        return
+    ch = data.get("channel", {})
+    total = ch.get("total", 0)
+    items = ch.get("item", [])
+    if isinstance(items, dict):
+        items = [items]
+    if not items:
+        print(f"  (용례 없음, total={total})")
+        return
+    print(f"  [우리말샘 용례 · collocation evidence] total={total}")
+    print(f"  '{query}' 의 자연 공기 단어 (앞뒤 ±{context}자):\n")
+    for i, it in enumerate(items, 1):
+        ex = it.get("example", "")
+        if not ex:
+            continue
+        idx = ex.find(query)
+        if idx < 0:
+            snippet = ex[:context * 2]
+        else:
+            s = max(0, idx - context)
+            e = min(len(ex), idx + len(query) + context)
+            snippet = ex[s:e].replace("\n", " ")
+        print(f"  {i:2d}. ...{snippet}...")
+
+
+def render_kbase(root, raw=False, show_trans=False):
+    if raw:
+        ET.dump(root)
+        return
+    total = root.findtext("total", "0")
+    items = root.findall("item")
+    if not items:
+        print(f"  (결과 없음, total={total})")
+        return
+    print(f"  [한국어기초사전] total={total}")
+    for i, it in enumerate(items, 1):
+        word = it.findtext("word", "")
+        pos = it.findtext("pos", "")
+        grade = it.findtext("word_grade", "")
+        origin = it.findtext("origin", "")
+        origin_tag = f" 〈{origin}〉" if origin else ""
+        grade_tag = f" [{grade}]" if grade else ""
+        print(f"\n  {i}. {word}{origin_tag}  ({pos}){grade_tag}")
+        for j, s in enumerate(it.findall("sense"), 1):
+            defi = s.findtext("definition", "")
+            if defi:
+                print(f"     {j}) {defi}")
+            if show_trans:
+                for tr in s.findall("translation"):
+                    lang = (tr.findtext("trans_lang", "") or "").strip()
+                    tw = (tr.findtext("trans_word", "") or "").strip()
+                    if tw:
+                        lang_tag = f"[{lang}] " if lang else ""
+                        print(f"        ↳ {lang_tag}{tw}")
+
+
+def render_stdict(data, raw=False):
+    if raw:
+        print(json.dumps(data, ensure_ascii=False, indent=2))
+        return
+    ch = data.get("channel", {})
+    total = ch.get("total", 0)
+    items = ch.get("item", [])
+    if isinstance(items, dict):
+        items = [items]
+    if not items:
+        print(f"  (결과 없음, total={total})")
+        return
+    print(f"  [표준국어대사전] total={total}")
+    for i, it in enumerate(items, 1):
+        word = it.get("word", "")
+        pos = it.get("pos", "")
+        sense_list = it.get("sense", [])
+        if isinstance(sense_list, dict):
+            sense_list = [sense_list]
+        print(f"\n  {i}. {word}  ({pos})")
+        for j, s in enumerate(sense_list[:5], 1):
+            defi = s.get("definition", "")
+            print(f"     {j}) {defi}")
+
+
+def render_urimal(data, raw=False):
+    if raw:
+        print(json.dumps(data, ensure_ascii=False, indent=2))
+        return
+    ch = data.get("channel", {})
+    total = ch.get("total", 0)
+    items = ch.get("item", [])
+    if isinstance(items, dict):
+        items = [items]
+    if not items:
+        print(f"  (결과 없음, total={total})")
+        return
+    print(f"  [우리말샘] total={total}")
+    for i, it in enumerate(items, 1):
+        word = it.get("word", "")
+        pos = it.get("pos", "")
+        cat = it.get("cat", "")
+        sense_list = it.get("sense", [])
+        if isinstance(sense_list, dict):
+            sense_list = [sense_list]
+        cat_tag = f" [{cat}]" if cat else ""
+        print(f"\n  {i}. {word}  ({pos}){cat_tag}")
+        for j, s in enumerate(sense_list[:5], 1):
+            defi = s.get("definition", "")
+            print(f"     {j}) {defi}")
+
+
+def main():
+    ap = argparse.ArgumentParser(description="표준국어대사전 / 우리말샘 / 한국어기초사전 CLI")
+    ap.add_argument("word", help="검색어")
+    ap.add_argument("-u", "--urimal", action="store_true", help="우리말샘 사용")
+    ap.add_argument("-k", "--kbase", action="store_true", help="한국어기초사전 사용")
+    ap.add_argument("-a", "--all", action="store_true", help="3개 사전 동시 검색")
+    ap.add_argument("-b", "--both", action="store_true", help="표준+우리말샘 (legacy)")
+    ap.add_argument("-x", "--examples", action="store_true",
+                    help="용례 검색 (part=exam) — collocation evidence 추출. 우리말샘 기준")
+    ap.add_argument("--pos", help="품사 코드 (0~15)")
+    ap.add_argument("--method", default="exact",
+                    choices=["exact", "include", "start", "end", "wildcard"],
+                    help="검색 방식 (기본 exact)")
+    ap.add_argument("--num", type=int, default=10, help="결과 수 10~100 (기본 10)")
+    ap.add_argument("--start", type=int, default=1, help="시작 (1~1000)")
+    ap.add_argument("--context", type=int, default=22,
+                    help="용례 모드에서 query 단어 앞뒤 context 글자수 (기본 22)")
+    ap.add_argument("--translated", action="store_true",
+                    help="KBASE(-k) 다국어 번역 함께 출력")
+    ap.add_argument("--trans-lang", dest="trans_lang", type=int, default=1, metavar="N",
+                    help="번역 언어 코드 (1=영어 2=일본어 3=프랑스어 4=스페인어 5=아랍어 6=몽골어 "
+                         "7=베트남어 8=태국어 9=인도네시아어 10=러시아어 11=중국어, 기본 1)")
+    ap.add_argument("--raw", action="store_true", help="원본 출력")
+    args = ap.parse_args()
+
+    stdict_key = os.environ.get("KRDICT_STDICT_KEY", "")
+    urimal_key = os.environ.get("KRDICT_URIMAL_KEY", "")
+    kbase_key = os.environ.get("KRDICT_KBASE_KEY", "")
+
+    # selection logic
+    explicit = args.urimal or args.kbase
+    use_stdict = args.all or args.both or (not explicit and not args.examples)
+    use_urimal = args.all or args.both or args.urimal or args.examples
+    use_kbase = args.all or args.kbase
+    # examples 모드는 우리말샘 part=exam 만 의미 있음 (KBASE 도 part=exam 있지만 corpus 작음)
+    if args.examples:
+        use_stdict = False
+        use_kbase = False
+
+    if use_stdict and not stdict_key:
+        print("⚠️  KRDICT_STDICT_KEY 미설정. https://stdict.korean.go.kr 인증키 신청", file=sys.stderr)
+        use_stdict = False
+    if use_urimal and not urimal_key:
+        print("⚠️  KRDICT_URIMAL_KEY 미설정. https://opendict.korean.go.kr 인증키 신청", file=sys.stderr)
+        use_urimal = False
+    if use_kbase and not kbase_key:
+        print("⚠️  KRDICT_KBASE_KEY 미설정. https://krdict.korean.go.kr 인증키 신청", file=sys.stderr)
+        use_kbase = False
+    if not (use_stdict or use_urimal or use_kbase):
+        sys.exit(1)
+
+    common = {
+        "q": args.word,
+        "method": args.method,
+        "num": str(min(max(args.num, 10), 100)),
+        "start": str(args.start),
+    }
+    if args.pos:
+        common["pos"] = args.pos
+
+    print(f"검색: '{args.word}'  (method={args.method})")
+
+    if use_stdict:
+        params = {**common, "key": stdict_key, "req_type": "json"}
+        data = fetch(STDICT_URL, params)
+        render_stdict(data, raw=args.raw)
+    if use_urimal:
+        if use_stdict:
+            print()
+        params = {**common, "key": urimal_key, "req_type": "json"}
+        if args.examples:
+            params["part"] = "exam"
+            params["num"] = "30"
+        data = fetch(URIMAL_URL, params)
+        if args.examples:
+            render_examples(data, args.word, context=args.context, raw=args.raw)
+        else:
+            render_urimal(data, raw=args.raw)
+    if use_kbase:
+        if use_stdict or use_urimal:
+            print()
+        # 한국어기초사전은 XML 만 반환 (req_type=json 무시)
+        params = {**common, "key": kbase_key}
+        if args.translated:
+            params["translated"] = "y"
+            params["trans_lang"] = str(args.trans_lang)
+        root = fetch(KBASE_URL, params, as_xml=True)
+        render_kbase(root, raw=args.raw, show_trans=args.translated)
+
+
+if __name__ == "__main__":
+    main()

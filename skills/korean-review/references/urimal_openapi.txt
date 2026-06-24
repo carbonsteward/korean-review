@@ -1,0 +1,811 @@
+우리말샘 - 오픈 API 서비스 소개본문바로가기
+이 누리집은 대한민국 공식 전자정부 누리집입니다.
+ 
+
+집필 참여하기
+사전 통계
+어휘 지도
+작은 창 사전
+
+들어가기
+회원 가입
+
+통합검색옛한글
+
+찾기자세히 찾기
+
+오픈 API 소개
+오픈 API 사용 신청
+오픈 API 예시
+1. 우리말샘 오픈 API 서비스 소개
+
+ 우리말샘 오픈 API는 검색 플랫폼을 외부에 공개하여 다양하고 재미있는 서비스 및 애플리케이션을 개발할 수 있도록 외부 개발자와 사용자들이 공유하는 프로그램입니다. 
+ 우리말샘에 구축된 양질의 사전 정보를 개인 또는 기관에서 오픈 API를 이용해 자유롭게 이용할 수 있도록 제공합니다.
+ 오픈 API란?
+하나의 웹 사이트에서 자신이 가진 기능을 이용할 수 있도록 공개한 프로그래밍 인터페이스를 오픈 API라고 합니다.
+2. 우리말샘 오픈 API 서비스 인증키 발급
+
+ 오픈 API 서비스를 이용하기 위해서는 먼저 인증키를 발급받아야 합니다. 인증키가 올바르지 않은 경우에는 서비스 이용이 제한됩니다. 인증키가 유효하지 않거나 인증키를 분실한 경우에는 인증키를 재발급받아야 합니다.
+ 
+3. 우리말샘 오픈 API 서비스 이용 안내
+
+ 연계 표준 서비스를 이용하기 위한 XML, JSON 기반의 데이터 형식, 갱신 데이터 요청 변수, 반환되는 코드값을 제공합니다.
+ 
+ 
+
+사전 검색 오픈 API
+사전 내용 오픈 API
+오픈 API 요청 URL
+https://opendict.korean.go.kr/api/search검색 요청 변수(Request Parameters)
+검색 요청 변수 목록요청 변수타입허용값필수/선택설명
+keystring16진수 32자리필수인증키
+qstring-필수검색어(UTF-8 인코딩)
+req_typestring xml
+json
+선택요청 타입(기본값 xml)
+
+startinteger 1~1000선택검색의 시작 번호(기본값 1)
+numinteger 10~100선택결과 출력 건수(기본값 10)
+partstringword
+exam
+선택- 검색 대상(기본값 word)
+word: 어휘
+exam: 용례
+※ 자세히 찾기(advanced 값이 'n')인 경우 적용 된다.
+
+sortstringdict
+popular
+date
+선택- 정렬 방식(기본값 dict)
+dict: 우리말샘순
+popular: 많이 찾은 순
+date: 새로 올린 순
+※ 검색 대상이 어휘(word), 자세히 찾기(advanced값이 'y')인 경우 적용 된다.
+
+advancedstringn
+y
+선택- 자세히 찾기 여부(기본값 n)
+※ ‘y’일 경우, ‘advanced’ 요청 변수 아래(요청 변수‘target’부터)가 적용된다.
+
+※ 하단의 요청 변수들을 사용하시려면 자세히 찾기 여부(기본값 n)인 "advanced" 요청 변수를 'y'로 하셔야 합니다.
+targetinteger1 ~ 15선택- 찾을 대상(기본값 1)
+1: 어휘(표제어)
+2: 원어
+3: 어원
+4: 발음
+5: 활용
+6: 활용의 준말
+7: 문형
+8: 문법
+9: 뜻풀이
+10: 용례
+11: 용례 출처
+12: 대역어
+13: 학명
+14: 수어 정보
+15: 규범 정보
+※ ‘원어(2)’ 또는 ‘대역어(12)’ 선택 시 요청 변수 ‘lang(언어)’를 설정할 수 있다.
+※ ‘수어 정보(14)’ 선택 시 요청 변수 ‘method(검색 방식)’은 ‘yes(내용 있음)’ 또는 ‘no(내용 없음)’만 선택할 수 있다. 요청 변수 ‘q(검색어)’는 무시되며 수어 정보가 있거나 혹은 없는 어휘 검색 결과를 제공한다.
+※ ‘규범정보(15)’ 선택 시 요청 변수 ‘norm(규범 유형)’을 설정할 수 있다.
+
+methodstringexact
+include
+start
+end
+yes
+no
+선택- 검색 방식(기본값: exact)
+exact: 일치 검색
+include: 포함 검색
+start: 시작
+end: 끝
+yes: 내용 있음
+no: 내용 없음
+※ ‘target(찾을 대상)’이 ‘수어정보(14)’일 경우 ‘yes(내용 있음), no(내용 없음)’중 하나를 선택한다.
+
+type1array of stringall
+word
+phrase
+idiom
+proverb
+선택- 구분 1(기본값 all)
+all: 전체
+- 아래 값을 다중 선택할 수 있도록 콤마(,)로 구분하여 나열한다.
+word: 단어
+phrase: 구
+idiom: 관용구
+proverb: 속담
+
+type2array of stringall
+native
+chinese
+loanword
+hybrid
+선택- 구분 2(기본값 all)
+all: 전체
+- 아래 값을 다중 선택할 수 있도록 콤마(,)로 구분하여 나열한다.
+native: 고유어
+chinese: 한자어
+loanword: 외래어
+hybrid: 혼종어
+
+type3array of stringall
+general
+dialect
+nkorean
+ancient
+선택- 구분 3(기본값 all)
+all: 전체
+- 아래 값을 다중 선택할 수 있도록 콤마(,)로 구분하여 나열한다.
+general: 일반어
+dialect: 지역어(방언)
+nkorean: 북한어
+ancient: 옛말
+
+type4array of stringall
+general
+technical
+선택- 구분 4(기본값 all)
+all: 전체
+- 아래 값을 다중 선택할 수 있도록 콤마(,)로 구분하여 나열한다.
+general: 일상어
+technical: 전문어
+※ ‘general(일상어)’ 선택 시, 요청 변수 ‘cat(전문 분야)’는 무시된다.
+
+posarray of integer0~27선택- 품사(기본값 0)
+0: 전체
+- 아래 값을 다중 선택할 수 있도록 콤마(,)로 구분하여 나열한다.
+1: 명사
+2: 대명사
+3: 수사
+4: 조사
+5: 동사
+6: 형용사
+7: 관형사
+8: 부사
+9: 감탄사
+10: 접사
+11: 의존 명사
+12: 보조 동사
+13: 보조 형용사
+14: 어미
+15: 관형사·명사
+16: 수사·관형사
+17: 명사·부사
+18: 감탄사·명사
+19: 대명사·부사
+20: 대명사·감탄사
+21: 동사·형용사
+22: 관형사·감탄사
+23: 부사·감탄사
+24: 의존명사·조사
+25: 수사·관형사·명사
+26: 대명사·관형사
+27: 품사 없음
+
+regionarray of integer0~23선택- 방언 지역(기본값 0)
+0: 전체
+- 아래 값을 다중 선택할 수 있도록 콤마(,)로 구분하여 나열한다.
+1: 강원
+2: 경기
+3: 경남
+4: 경북
+5: 경상
+6: 전남
+7: 전라
+8: 전북
+9: 제주
+10: 충남
+11: 충북
+12: 충청
+13: 평남
+14: 평북
+15: 평안
+16: 함경
+17: 함남
+18: 함북
+19: 황해
+20: 중국 길림성
+21: 중국 요령성
+22: 중국 흑룡강성
+23: 중앙아시아
+
+catarray of integer0~67선택- 전문 분야(기본값 0)
+0: 전체
+- 아래 값을 다중 선택할 수 있도록 콤마(,)로 구분하여 나열한다.
+1: 가톨릭
+2: 건설
+3: 경영
+4: 경제
+5: 고유명 일반
+6: 공업
+7: 공예
+8: 공학 일반
+9: 광업
+10: 교육
+11: 교통
+12: 군사
+13: 기계
+14: 기독교
+15: 농업
+16: 동물
+17: 매체
+18: 무용
+19: 문학
+20: 물리
+21: 미술
+22: 민속
+23: 법률
+24: 보건 일반
+25: 복식
+26: 복지
+27: 불교
+28: 사회 일반
+29: 산업 일반
+30: 생명
+31: 서비스업
+32: 수산업
+33: 수의
+34: 수학
+35: 식물
+36: 식품
+37: 심리
+38: 약학
+39: 언어
+40: 역사
+41: 연기
+42: 영상
+43: 예체능 일반
+44: 음악
+45: 의학
+46: 인명
+47: 인문 일반
+48: 임업
+49: 자연 일반
+50: 재료
+51: 전기·전자
+52: 정보·통신
+53: 정치
+54: 종교 일반
+55: 지구
+56: 지리
+57: 지명
+58: 책명
+59: 천문
+60: 천연자원
+61: 철학
+62: 체육
+63: 한의
+64: 해양
+65: 행정
+66: 화학
+67: 환경
+※ ‘cat(전문 분야)’를 설정하려면 요청 변수 ‘type4(구분 4)’가 ‘all(전체)’ 또는 ‘technical(전문어)’로 설정되어야 한다.
+
+langInteger0~48선택- 언어(기본값 0)
+ 0: 전체
+ 1: 고유어
+ 2: 한자
+ 3: 안 밝힘
+ 4: 영어
+ 5: 그리스어
+ 6: 네덜란드어
+ 7: 노르웨이어
+ 8: 독일어
+ 9: 라틴어
+10: 러시아어
+11: 루마니아어
+12: 마오리어
+13: 말레이어
+14: 몽골어
+15: 바스크어
+16: 버마어
+17: 베트남어
+18: 불가리아어
+19: 산스크리트어
+20: 세르보·크로아트어
+21: 스와힐리어
+22: 스웨덴어
+23: 아랍어
+24: 아일랜드어
+25: 에스파냐어
+26: 우즈베크어
+27: 우크라이나어
+28: 이탈리아어
+29: 인도네시아어
+30: 일본어
+31: 중국어
+32: 체코어
+33: 캄보디아어
+34: 케추아어
+35: 타갈로그어
+36: 타이어
+37: 터키어
+38: 티베트어
+39: 페르시아어
+40: 포르투갈어
+41: 폴란드어
+42: 프랑스어
+43: 프로방스어
+44: 핀란드어
+45: 헝가리어
+46: 히브리어
+47: 힌디어
+48: 기타어
+49: 덴마크어
+※ 요청변수 ‘target(찾을 대상)’이 ‘원어(2)’, ‘대역어(12)’일 경우, 요청변수 ‘lang(언어)’를 설정할 수 있다.
+
+normInteger0~13선택- 규범 유형(기본값 0)
+0: 전체
+1: 없음
+2: 한글 맞춤법
+3: 띄어쓰기
+4: 표준어
+5: 문장 부호
+6: 외래어 표기
+7: 로마자 표기
+8: 발음
+9: 문법
+10: 어휘
+11: 언어 예절
+12: 순화
+13: 기타
+※ 요청변수 ‘target(찾을 대상)’이 ‘규범정보(15)’일 경우, 요청변수 ‘norm(규범 유형)’을 설정할 수 있다.
+
+multimediaarray of integer0~6선택- 다중 매체(멀티미디어)(기본값 0)
+0: 전체
+- 아래 값을 다중 선택할 수 있도록 콤마(,)로 구분하여 나열한다.
+1: 사진
+2: 삽화
+3: 동영상
+4: 애니메이션
+5: 소리
+6: 없음
+
+letter_sinteger1 ~ 80선택- 음절수 시작(기본값 1)
+letter_einteger1 ~ 80선택- 음절수 끝(기본값 80)
+date_sintegeryyyymmdd선택- 올린 날짜 시작일
+date_eintegeryyyymmdd선택- 올린 날짜 종료일
+update_sintegeryyyymmdd선택- 고친 날짜 시작일
+update_eintegeryyyymmdd선택- 고친 날짜 종료일
+검색 출력 결과 필드(Response field)
+검색 출력 결과 필드 설명필드타입필수/선택설명
+channel-필수결과를 포함하는 컨테이너
+titlestring필수우리말샘 오픈 API 제목 (고정값: 우리말샘 개발 지원(Open API) - 사전 검색)
+linkstring필수우리말샘 URL(고정값: https://opendict.korean.go.kr)
+descriptionstring필수오픈 API 서비스 설명 (고정값: 우리말샘 개발 지원(Open API) – 사전 검색 결과)
+lastBuildDateinteger필수검색 결과를 생성한 시간
+totalinteger필수검색된 전체 어휘 개수
+startinteger필수검색 결과 시작 번호
+numinteger필수검색 결과로 제공하는 어휘 개수
+item-필수개별 검색 결과를 포함하는 컨테이너. ‘num’ 만큼 반복함
+wordstring필수표제어
+sense-필수개별 의미를 포함하는 컨테이너
+sense_nostring필수의미번호(3자리 정수)
+definitionstring필수뜻풀이
+posstring선택품사. 구, 속담, 관용구는 품사가 없음
+linkstring필수사전 내용 보기 URL
+typestring필수범주(일반어, 지역어(방언), 북한어, 옛말)
+catstring선택전문 분야
+originstring선택원어
+syntacticArgumentstring선택문형
+syntacticAnnotationstring선택문법
+target_codeinteger필수대상 코드
+검색 에러 메시지
+검색 에러 메시지 설명에러 코드에러 메시지설명
+000System error시스템 에러
+020Unregistered key등록되지 않은 키
+021Your key is temporary unavailable일시적으로 사용 중지된 인증키
+100Incorrect query request부적절한 쿼리 요청. query 필드 자체가 없는 경우에 발생하는 에러 메시지
+101Invalid target value부적절한 검색 필드
+102Invalid method value부적절한 검색 방식
+103Invalid num value부적절한 검색 개수
+104Invalid start value부적절한 start 값
+105Invalid sort value부적절한 정렬순
+106Invalid advanced value부적절한 자세히 찾기 여부
+107Invalid lang value부적절한 언어 값
+108Invalid norm value부적절한 규범 유형 값
+109Invalid part value부적절한 검색 대상 값
+200Invalid type1 value부적절한 type1 값
+201Invalid type2 value부적절한 type2 값
+202Invalid type3 value부적절한 type3 값
+203Invalid type4 value부적절한 type4 값
+210Invalid pos value부적절한 품사
+211Invalid region value부적절한 방언 지역
+212Invalid cat value부적절한 전문 분야
+213Invalid multimedia value부적절한 다중 매체(멀티미디어)
+214Invalid letter_s value부적절한 음절수 시작
+215Invalid letter_e value부적절한 음절수 종료
+216Invalid date_s value부적절한 올린 날짜 시작일
+217Invalid date_e value부적절한 올린 날짜 종료일
+검색 출력 메시지 XML 예시(어휘)
+<?xml version="1.0" encoding="UTF-8" ?>
+<channel>
+<title> 우리말샘 개발 지원(Open API) - 사전 검색 </title>
+<link> https://opendict.korean.go.kr/search </link>
+<description> 우리말샘 개발 지원(Open API) - 사전 검색 결과 </description>
+<total>2</total>
+<start>1</start>
+<num>2</num>
+<item>
+<word>나무</word>
+<sense>
+<target_code>368281</target_code>
+<sense_no>001</sense_no>
+<definition> 줄기나 가지가 목질로 된 여러해살이 식물.</definition>
+<pos>명사</pos>
+<link>https://opendict.korean.go.kr/dictionary/view?sense_no=368281</link>
+<type>일반어</type>
+</sense>
+</item>
+<item>
+<word>나무</word>
+<sense>
+<target_code>490250</target_code>
+<sense_no>004</sense_no>
+<definition> 소 장수들의 은어로, 팔백 냥을 이르던 말.</definition>
+<pos>명사</pos>
+<link>https://opendict.korean.go.kr/dictionary/view?sense_no=490250</link>
+<type>일반어</type>
+</sense>
+</item>
+</channel>
+
+검색 출력 메시지 XML 예시(용례)
+<?xml version="1.0" encoding="UTF-8" ?>
+<channel>
+<title> 우리말샘 개발 지원(Open API) - 사전 검색 </title>
+<link> https://opendict.korean.go.kr/search </link>
+<description> 우리말샘 개발 지원(Open API) - 사전 검색 결과 </description>
+<total>2</total>
+<start>1</start>
+<num>2</num>
+<item>
+<target_code>72651</target_code>
+<word>가구</word>
+<sense_no>002</sense_no>
+<example>나무다리 윗부분은 고건축에서 보이는 가구 수법대로 시공되었다.</example>
+<link>https://opendict.korean.go.kr/dictionary/view?sense_no=72651</link>
+</item>
+<item>
+<target_code>375410</target_code>
+<word>가끔-가다가</word>
+<sense_no>001</sense_no>
+<example>원숭이도 가끔가다가 나무에서 떨어질 때가 있다.</example>
+<link>https://opendict.korean.go.kr/dictionary/view?sense_no=375410</link>
+</item>
+</channel>
+
+검색 출력 메시지 XML 예시
+검색 에러 메시지 설명에러 메시지 XML 구조에러 메시지 XML 예시
+<?xml version="1.0" encoding="UTF-8" ?>
+<error>
+<error_code>에러 코드</error_code>
+<message>에러 메시지</message>
+</error>
+<?xml version="1.0" encoding="UTF-8" ?>
+<error>
+<error_code>020</error_code>
+<message>Unregistered key</message>
+</error>
+
+검색 출력 메시지 JSON 예시(어휘)
+{
+"channel": {
+"title": " 우리말샘 개발 지원(Open API) - 사전 검색 ",
+"link": " https://opendict.korean.go.kr/search ",
+"description": " 우리말샘 개발 지원(Open API) - 사전 검색 결과 ",
+"total": 2,
+"start": 1,
+"num": 2,
+"item": [
+{
+"word": "나무",
+"sense": {
+"target_code": 368281,
+"sense_no": 1,
+"definition": " 줄기나 가지가 목질로 된 여러해살이 식물.",
+"pos": "명사",
+"link": "https://opendict.korean.go.kr/dictionary/view?sense_no=368281",
+"type": "일반어"
+}
+},
+{
+"word": "나무",
+"sense": {
+"target_code": 490250,
+"sense_no": 4,
+"definition": " 소 장수들의 은어로, 팔백 냥을 이르던 말.",
+"pos": "명사",
+"link": "https://opendict.korean.go.kr/dictionary/view?sense_no=490250",
+"type": "일반어"
+}
+}
+]
+}
+}
+
+검색 출력 메시지 JSON 예시(용례)
+{
+"channel": {
+"title": " 우리말샘 개발 지원(Open API) - 사전 검색 ",
+"link": " https://opendict.korean.go.kr/search ",
+"description": " 우리말샘 개발 지원(Open API) - 사전 검색 결과 ",
+"total": 2,
+"start": 1,
+"num": 2,
+"item": [
+{
+"target_code": 72651,
+"word": "가구",
+"sense_no": 2,
+"example": "나무다리 윗부분은 고건축에서 보이는 가구 수법대로 시공되었다.",
+"link": "https://opendict.korean.go.kr/dictionary/view?sense_no=72651"
+},
+{
+"target_code": 375410,
+"word": "가끔-가다가",
+"sense_no": 1,
+"example": "원숭이도 가끔가다가 나무에서 떨어질 때가 있다.",
+"link": "https://opendict.korean.go.kr/dictionary/view?sense_no=375410"
+}
+]
+}
+}
+
+검색 출력 메시지 JSON 예시
+검색 에러 메시지 설명에러 메시지 JSON 구조에러 메시지 JSON 예시
+{
+"error": {
+"error_code": "에러 코드",
+"message": "에러 메시지"
+}
+}
+{
+"error": {
+"error_code": 20,
+"message": "Unregistered key"
+}
+}
+
+오픈 API 요청 URL
+https://opendict.korean.go.kr/api/view
+검색 요청 변수(Request Parameters)
+검색 요청 변수 목록요청 변수타입허용값필수/선택설명
+keystring16진수 32자리필수인증키
+methodstringword_info
+target_code
+필수-검색 방식(기본값 word_info)
+word_info: 표제어 정보(표제어 + 의미 번호)
+target_code: *대상 코드(target_code)
+
+req_typestring xml
+json
+선택요청 타입(기본값 xml)
+
+qstring-필수-검색어(UTF-8 인코딩)
+method 입력 값이 'word_info 경우 어휘 정보 입력
+method 입력 값이 'target_code'일 경우 대상 코드 입력
+
+검색 출력 결과 필드(Response field)
+검색 출력 결과 필드 설명상위 필드필드타입필수/선택설명
+-channel-필수결과를 포함하는 컨테이너
+channeltitlestring필수우리말샘 오픈 API 제목 (고정값: 우리말샘 개발 지원(Open API) - 사전 검색)
+channellinkstring필수우리말샘 사전 내용 URL
+channeldescriptionstring필수오픈 API 서비스 설명 (고정값: 우리말샘 개발 지원(Open API) – 사전 내용 검색 결과)
+channellastBuildDateinteger필수검색 결과를 생성한 시간
+channeltotalinteger필수검색 건수(1: 결과 있음, 0이면 결과 없음)
+channelitem-필수검색 결과를 포함하는 컨테이너
+itemtarget_codeinteger필수대상 코드
+itemgroup_codeinteger필수다의어 번호(고유한 구분 KEY 값 – 다의어 묶음 정보로 사용)
+itemgroup_orderinteger필수다의어 순번(다의어 묶음 정보로 사용)
+itemword_infostring필수형태 항목을 포함하는 컨테이너
+word_infowordstring필수표제어
+word_infoword_unitstring필수구성 단위
+word_infoword_typestring필수고유어 여부
+word_infooriginal_language_infostring선택원어 항목을 포함하는 컨테이너(반복)
+original_language_infooriginal_languagestring필수원어
+original_language_infolanguage_typestring필수언어
+word_infopronunciation_infostring선택표제어 발음 항목을 포함하는 컨테이너(반복)
+pronunciation_infopronunciationstring필수발음
+word_infoconju_infostring선택활용,준말 항목을 포함하는 컨테이너(반복)
+conju_infoconjugation_infostring선택활용 항목을 포함하는 컨테이너
+conjugation_infoconjugationstring필수활용
+conjugation_infopronunciation_infostring선택활용의 발음 항목을 포함하는 컨테이너(반복)
+pronunciation_infopronunciationstring필수발음
+conju_infoabbreviation_infostring선택준말 항목을 포함하는 컨테이너
+abbreviation_infoabbreviationstring필수준말
+abbreviation_infopronunciation_infostring선택준말의 발음 항목을 포함하는 컨테이너(반복)
+pronunciation_infopronunciationstring필수발음
+word_infooriginstring선택어원
+word_infoallomorphstring선택이형태
+itemsense_info-필수의미 항목을 포함하는 컨테이너
+sense_infosense_nostring필수의미번호(3자리 정수)
+sense_infoposstring선택품사. 구, 속담, 관용구는 품사가 없음
+sense_infotypestring필수범주(일반어, 지역어(방언), 북한어, 옛말)
+sense_infodefinitionstring필수뜻풀이(태그 정보: IN-미확정, DR-방언 지역, FL-비규범)
+sense_infodefinition_originalstring필수뜻풀이(어휘링크 포함)
+sense_infoscientific_namestring선택학명
+sense_infopattern_infostring선택문형 항목을 포함하는 컨테이너(반복)
+pattern_infopatternstring필수문형
+sense_infogrammar_infostring선택문법 항목을 포함하는 컨테이너(반복)
+grammar_infogrammarstring필수문법
+sense_infocat_infostring선택전문 분야 항목을 포함하는 컨테이너(반복)
+cat_infocatstring필수전문 분야
+sense_inforegion_infostring선택방언 지역 항목을 포함하는 컨테이너(반복)
+region_inforegionstring필수방언 지역
+sense_infoexample_infostring선택용례 항목을 포함하는 컨테이너(반복)
+example_infoexamplestring필수용례(태그 정보: IN-미확정, FL-비규범)
+example_infosourcestring선택출처
+example_infooriginstring선택원문
+example_infotranslationstring선택번역
+example_inforegionstring선택방언 지역
+sense_inforelation_infostring선택관련 어휘 항목을 포함하는 컨테이너(반복)
+relation_infowordstring필수표제어(예: 나무001)
+relation_infotypestring필수유형
+relation_infolink_target_codestring필수링크 대상 코드
+relation_infolinkstring필수링크
+sense_infotranslation_infostring선택대역어 항목을 포함하는 컨테이너(반복)
+translation_infotranslationstring필수대역
+translation_infolanguage_typestring필수언어
+sense_infohistory_infostring선택역사 정보 항목을 포함하는 컨테이너
+history_infoword_formstring선택어형 변화/시기
+history_infodescstring선택설명
+history_infoallomorphstring선택이형태/이표기
+history_inforemarkstring선택관련 정보
+history_infohistory_sense_infostring선택역사정보 의미 항목을 포함하는 컨테이너(반복)
+history_sense_infodefinitionstring선택뜻풀이(태그 정보: IN-미확정, DR-방언 지역, FL-비규범)
+history_sense_infohistory_century_infostring선택역사 정보 세기 항목을 포함하는 컨테이너(반복)
+history_century_infocenturystring선택세기
+history_century_infomarkstring선택표기
+history_century_infohistory_example_infostring선택역사정보 용례 항목을 포함하는 컨테이너(반복)
+history_example_infoexamplestring선택용례(태그 정보: IN-미확정, FL-비규범)
+history_example_infosourcestring선택출전
+history_example_infooriginstring선택원문
+history_example_infotranslationstring선택번역
+sense_infomultimedia_infostring선택멀티미디어 항목을 포함하는 컨테이너(반복)
+multimedia_infolabelstring필수제목
+multimedia_infotypestring필수유형
+multimedia_infolinkstring필수링크
+sense_infonorm_infostring선택규범 정보 항목을 포함하는 컨테이너(반복)
+norm_infotypestring필수규범 정보 유형
+norm_inforolestring선택관련 조항
+norm_infodescstring선택설명
+sense_infoproverb_infostring선택관용구/속담 항목을 포함하는 컨테이너(반복)
+proverb_infowordstring필수표제어
+proverb_infodefinitionstring필수뜻풀이
+proverb_infotypestring필수유형(관용구/속담)
+proverb_infolink_target_codestring필수링크 대상 코드
+proverb_infolinkstring필수링크
+sense_infosl_info_linkstring선택수어 정보 링크
+검색 에러 메시지(error message)
+검색 에러 메시지 설명에러 코드에러 메시지설명
+000System error시스템 에러
+020Unregistered key등록되지 않은 키
+021Your key is temporary unavailable일시적으로 사용 중지된 인증키
+100Incorrect query request부적절한 쿼리 요청. query 필드 자체가 없는 경우에 발생하는 에러 메시지
+102Invalid method value부적절한 검색 방식
+검색 출력 메시지 XML 예시
+<?xml version="1.0" encoding="UTF-8" ?>
+<channel>
+<title>우리말샘 개발 지원(Open API) - 사전 내용 검색</title>
+<link>https://opendict.korean.go.kr/dictionary/view?sense_no=645721</link>
+<description>우리말샘 개발 지원(Open API) - 사전 내용 검색 결과</description>
+<lastBuildDate>20171009133403</lastBuildDate>
+<total>1</total>
+<item>
+<target_code>645721</target_code>
+<group_code>79596</group_code>
+<group_order>1</group_order>
+<wordInfo>
+<word>공공^기관</word>
+<word_unit>구</word_unit>
+<word_type>한자어</word_type>
+<original_language_info>
+ <original_language>公共機關</original_language>
+<language_type>한자</language_type>
+</original_language_info>
+</wordInfo>
+<senseInfo>
+<sense_no>001</sense_no>
+<type>일반어</type>
+<definition>국가나 사회의 구성원에게 두루 관계되는 기관.</definition>
+<cat_info>
+<cat>행정</cat>
+</cat_info>
+<example_info>
+<example>건설부는 정부 및 {공공 기관에서} 시행하는 시설 공사의 합리적 공사비 산정과 정부 예산의 효율적 집행을 위해 올해 적용될 표준 품셈 71개 항목을 개정했다.</example>
+<source>연합뉴스 1990년 1월</source>
+</example_info>
+<example_info>
+<example>국외 취업 정보는 {공공 기관이} 운영하는 인터넷 누리집에서 찾을 수 있다.</example>
+<source>한겨레 2010년 10월</source>
+</example_info>
+<sl_info_link>https://sldict.korean.go.kr/front/sign/signContentsView.do?origin_no=4052</sl_info_link>
+</sense_info>
+</item>
+</channel>
+
+검색 출력 메시지 XML 예시
+검색 에러 메시지 설명에러 메시지 XML 구조에러 메시지 XML 예시
+<?xml version="1.0" encoding="UTF-8" ?>
+<error>
+<error_code>에러 코드</error_code>
+<message>에러 메시지</message>
+</error>
+<?xml version="1.0" encoding="UTF-8" ?>
+<error>
+<error_code>020</error_code>
+<message>Unregistered key</message>
+</error>
+
+검색 출력 메시지 JSON 예시
+{
+"channel": {
+"title": "우리말샘 개발 지원(Open API) - 사전 내용 검색",
+"link": "https://opendict.korean.go.kr/dictionary/view?sense_no=645721",
+"description": "우리말샘 개발 지원(Open API) - 사전 내용 검색 결과",
+"lastbuilddate": 20171009133403,
+"total": 1,
+"item": {
+"target_code": 645721,
+"group_code": 79596,
+"group_order": 1,
+"wordinfo": {
+"word": "공공^기관",
+"word_unit": "구",
+"word_type": "한자어",
+"original_language_info": {
+"original_language": "公共機關",
+"language_type": "한자"
+}
+},
+"senseinfo": {
+"sense_no": 1,
+"type": "일반어",
+"definition": "국가나 사회의 구성원에게 두루 관계되는 기관.",
+"cat_info": {
+"cat": "행정"
+}
+"example_info": [
+{
+"example": "건설부는 정부 및 {공공 기관에서} 시행하는 시설 공사의 합리적 공사비 산정과 정부 예산의 효율적 집행을 위해 올해 적용될 표준 품셈 71개 항목을 개정했다.",
+"source": "연합뉴스 1990년 1월"
+},
+{
+"example": "국외 취업 정보는 {공공 기관이} 운영하는 인터넷 누리집에서 찾을 수 있다.",
+"source": "한겨레 2010년 10월"
+}
+],
+"sl_info_link": "https://sldict.korean.go.kr/front/sign/signContentsView.do?origin_no=4052"
+}
+}
+}
+}
+
+검색 출력 메시지 JSON 예시
+검색 에러 메시지 설명에러 메시지 JSON 구조에러 메시지 JSON 예시
+{
+"error": {
+"error_code": "에러 코드",
+"message": "에러 메시지"
+}
+}
+{
+"error": {
+"error_code": 20,
+"message": "Unregistered key"
+}
+}
+
+도움말
+이용 약관
+개인 정보 처리 방침
+저작권 정책
+알립니다
+개발 지원(Open API)
+의견 제시
+
+site국립국어원표준국어대사전근현대 국어사전한국어기초사전한국수어사전이동
+
+위로

@@ -1,0 +1,1757 @@
+한국어기초사전
+본문바로가기
+
+이 누리집은 대한민국 공식 전자정부 누리집입니다.
+
+범주별 찾기
+
+사전 통계
+
+작은 창 사전
+
+찾기
+자세히 찾기
+
+오픈 API 소개
+
+오픈 API 사용 신청
+
+오픈 API 예시
+
+1. 한국어기초사전 오픈 API 서비스 소개
+
+한국어기초사전 오픈 API는 검색 플랫폼을 외부에 공개하여 다양하고 재미있는 서비스 및 애플리케이션을 개발할 수 있도록 외부 개발자와 사용자들이 공유하는 프로그램입니다. 한국어기초사전에 구축된 양질의 사전 정보를 개인 또는 기관에서 오픈 API를 이용해 자유롭게 이용할 수 있도록 제공합니다.
+오픈 API란?
+
+하나의 웹 사이트에서 자신이 가진 기능을 이용할 수 있도록 공개한 프로그래밍 인터페이스를 오픈 API라고 합니다.
+
+2. 한국어기초사전 오픈 API 서비스 인증키 발급
+
+오픈 API 서비스를 이용하기 위해서는 먼저 인증키를 발급받아야 합니다. 인증키가 올바르지 않은 경우에는 서비스 이용이 제한됩니다. 인증키가 유효하지 않거나 인증키를 분실한 경우에는 인증키를 재발급받아야 합니다.
+
+3. 한국어기초사전 오픈 API 서비스 이용 안내
+
+연계 표준 서비스를 이용하기 위한 XML 기반의 데이터 형식, 갱신 데이터 요청 변수, 반환되는 코드값을 제공합니다.
+
+사전 검색 오픈 API
+
+사전 내용 오픈 API
+
+오픈 API 요청 URL
+
+https://krdict.korean.go.kr/api/search
+
+검색 요청 변수(Request Parameters)
+
+검색 요청 변수 리스트: 요청 변수, 타입, 허용값, 필수/선택, 설명으로 구성
+요청 변수
+
+타입
+
+허용값
+
+필수/선택
+
+설명
+
+key
+
+string
+
+16진수 32자리
+
+필수
+
+인증키
+
+q
+
+string
+
+-
+
+필수
+
+검색어(UTF-8 인코딩)
+
+start
+
+integer
+
+1~1000
+
+선택
+
+검색의 시작 번호(기본값 1)
+
+num
+
+integer
+
+10~100
+
+선택
+
+검색 결과 출력 건수(기본값 10)
+
+sort
+
+string
+
+dict
+popular
+
+선택
+
+- 정렬 방식(기본값 dict)
+dict: 사전 순
+popular: 많이 찾은 순
+
+part
+
+string
+
+word
+ip
+dfn
+exam
+
+선택
+
+- 검색 대상(기본값 word)
+word: 어휘
+ip: 관용구, 속담
+dfn: 뜻풀이
+exam: 용례
+
+translated
+
+string
+
+n
+y
+
+선택
+
+- 다국어 번역 여부(기본값-n)
+y일 경우 번역 언어 변수가 적용된다.
+
+trans_lang
+
+string
+
+0-11
+
+선택
+
+* 요청변수 ‘translated(다국어 번역 )’이 ‘y’일 경우 설정할 수 있다.
+- 번역 언어(기본값 0 - 전체 번역 언어)
+- 아래 값을 다중 선택할 수 있도록 콤마(,)로 구분하여 나열한다.
+전체(0), 영어(1), 일본어(2), 프랑스어(3), 스페인어(4), 아랍어(5), 몽골어(6), 베트남어(7), 타이어(8), 인도네시아어(9), 러시아어(10), 중국어(11)
+
+advanced
+
+string
+
+n
+y
+
+선택
+
+- 자세히찾기 여부 (기본값 – n)
+y일 경우 번역 언어 변수가 적용된다.
+
+※ 하단의 요청 변수들을 사용하시려면 자세히 찾기 여부(기본값 n)인 "advanced" 요청 변수를 'y'로 하셔야 합니다.
+
+target
+
+integer
+
+1~10
+
+선택
+
+- 찾을 대상 (기본값 1 – 표제어)
+어휘(표제어)(1), 뜻풀이(2), 용례(3), 원어(4), 발음(5), 활용(6), 활용의 준말(7), 관용구(8), 속담(9), 참고 정보(10)
+
+lang
+
+integer
+
+0~49
+
+선택
+
+※ 요청변수 ‘target(찾을 대상)’이 ‘원어(4)’일 경우는 요청변수 ‘lang(언어)’을 설정할 수 있다.
+- 언어 (기본값 0 - 전체)
+전체(0), 고유어(1), 한자(2), 안 밝힘(3), 영어(4), 그리스어(5), 네덜란드어(6), 노르웨어어(7), 독일어(8), 라틴어(9), 러시아어(10), 루마니아어(11), 마오리어(12), 말레이어(13), 몽골어(14), 바스크어(15), 버마어(16), 베트남어(17), 불가리어어(18), 산스크리트어(19), 세르보ᆞ크로아트어(20), 스와힐리어(21), 스웨덴어(22), 아랍어(23), 아일랜드어(24), 에스파냐어(25), 우즈베크어(26), 우크라이나어(27), 이탈리아어(28), 인도네시아어(29), 일본어(30), 중국어(31), 체코어(32), 캄보디아어(33), 케추아어(34), 타갈로그어(35), 타이어(36), 터키어(37), 티베트어(38), 페르시아어(39), 포르투갈어(40), 폴란드어(41), 프랑스어(42), 프로방스어(43), 핀란드어(44), 헝가리어(45), 히브리어(46), 힌디어(47), 기타어(48), 덴마크어(49)
+
+method
+
+string
+
+exact
+include
+start
+end
+
+선택
+
+- 검색 방식 (기본값 exact)
+exact: 일치 검색
+include: 포함 검색
+start: 시작
+end: 끝
+
+type1
+
+array of string
+
+all
+word
+phrase
+expression
+
+선택
+
+- 구분 1 (기본값 all)
+- 아래 값을 다중 선택할 수 있도록 콤마(,)로 구분하여 나열한다.
+word: 단어
+phrase: 구
+expression: 문법 표현
+
+type2
+
+array of string
+
+all
+native
+chinese
+loanword
+hybrid
+
+선택
+
+- 구분 2 (기본값 all)
+- 아래 값을 다중 선택할 수 있도록 콤마(,)로 구분하여 나열한다.
+native: 고유어
+chinese: 한자어
+loanword: 외래어
+hybrid: 혼종어
+
+level
+
+array of string
+
+all
+level1
+level2
+level3
+
+선택
+
+- 등급별 어휘 (기본값 all)
+- 아래 값을 다중 선택할 수 있도록 콤마(,)로 구분하여 나열한다.
+level1: 초급
+level2: 중급
+level3: 고급
+
+pos
+
+array of integer
+
+0 ~ 15
+
+선택
+
+- 품사 (기본값 0 - 전체 품사)
+- 아래 값을 다중 선택할 수 있도록 콤마(,)로 구분하여 나열한다.
+전체(0), 명사(1), 대명사(2), 수사(3), 조사(4), 동사(5), 형용사(6), 관형사(7), 부사(8), 감탄사(9), 접사(10), 의존 명사(11), 보조 동사(12), 보조 형용사(13), 어미(14), 품사 없음(15)
+
+multimedia
+
+array of integer
+
+0 ~ 6
+
+선택
+
+- 다중 매체 정보 (기본값 0 – 전체)
+- 아래 값을 다중 선택할 수 있도록 콤마(,)로 구분하여 나열한다.
+전체(0), 사진(1), 삽화(2), 동영상(3), 애니메이션(4), 소리(5), 없음(6)
+
+letter_s
+
+integer
+
+1 ~
+
+선택
+
+- 음절 수 시작 (기본값 1)
+
+letter_e
+
+integer
+
+0 ~
+
+선택
+
+- 음절 수 끝 (기본값 0)
+– 기본값 0은 모든 음절 수를 말함
+
+sense_cat
+
+array of integer
+
+0 ~ 153
+
+선택
+
+- 의미 범주 (기본값 0 – 전체)
+전체(0), 인간 > 전체(1), 인간 > 사람의 종류(2), 인간 > 신체 부위(3), 인간 > 체력 상태(4), 인간 > 생리 현상(5), 인간 > 감각(6), 인간 > 감정(7), 인간 > 성격(8), 인간 > 태도(9), 인간 > 용모(10), 인간 > 능력(11), 인간 > 신체 변화(12), 인간 > 신체 행위(13), 인간 > 신체에 가하는 행위(14), 인간 > 인지 행위(15), 인간 > 소리(16), 인간 > 신체 내부 구성(17), 삶 > 전체(18), 삶 > 삶의 상태(19), 삶 > 삶의 행위(20), 삶 > 일상 행위(21), 삶 > 친족 관계(22), 삶 > 가족 행사(23), 삶 > 여가 도구(24), 삶 > 여가 시설(25), 삶 > 여가 활동(26), 삶 > 병과 증상(27), 삶 > 치료 행위(28), 삶 > 치료 시설(29), 삶 > 약품류(30), 식생활 > 전체(31), 식생활 > 음식(32), 식생활 > 채소(33), 식생활 > 곡류(34), 식생활 > 과일(35), 식생활 > 음료(36), 식생활 > 식재료(37), 식생활 > 조리 도구(38), 식생활 > 식생활 관련 장소(39), 식생활 > 맛(40), 식생활 > 식사 및 조리 행위(41), 의생활 > 전체(42), 의생활 > 옷 종류(43), 의생활 > 옷감(44), 의생활 > 옷의 부분(45), 의생활 > 모자, 신발, 장신구(46), 의생활 > 의생활 관련 장소(47), 의생활 > 의복 착용 상태(48), 의생활 > 의복 착용 행위(49), 의생활 > 미용 행위(50), 주생활 > 전체(51), 주생활 > 건물 종류(52), 주생활 > 주거 형태(53), 주생활 > 주거 지역(54), 주생활 > 생활 용품(55), 주생활 > 주택 구성(56), 주생활 > 주거 상태(57), 주생활 > 주거 행위(58), 주생활 > 가사 행위(59),
+												사회 생활 > 전체(60), 사회 생활 > 인간관계(61), 사회 생활 > 소통 수단(62), 사회 생활 > 교통 수단(63), 사회 생활 > 교통 이용 장소(64), 사회 생활 > 매체(65), 사회 생활 > 직장(66), 사회 생활 > 직위(67), 사회 생활 > 직업(68), 사회 생활 > 사회 행사(69), 사회 생활 > 사회 생활 상태(70), 사회 생활 > 사회 활동(71), 사회 생활 > 교통 이용 행위(72), 사회 생활 > 직장 생활(73), 사회 생활 > 언어 행위(74), 사회 생활 > 통신 행위(75), 사회 생활 > 말(76), 경제 생활 > 전체(77), 경제 생활 > 경제 행위 주체(78), 경제 생활 > 경제 행위 장소(79), 경제 생활 > 경제 수단(80), 경제 생활 > 경제 산물(81), 경제 생활 > 경제 상태(82), 경제 생활 > 경제 행위(83), 교육 > 전체(84), 교육 > 교수 학습 주체(85), 교육 > 전공과 교과목(86), 교육 > 교육 기관(87), 교육 > 학교 시설(88), 교육 > 학습 관련 사물(89), 교육 > 학문 용어(90), 교육 > 교수 학습 행위(91), 교육 > 학문 행위(92), 종교 > 전체(93), 종교 > 종교 유형(94), 종교 > 종교 활동 장소(95), 종교 > 종교인(96), 종교 > 종교어(97), 종교 > 신앙 대상(98), 종교 > 종교 활동 도구(99), 종교 > 종교 행위(100), 문화 > 전체(101), 문화 > 문화 활동 주체(102), 문화 > 음악(103), 문화 > 미술(104), 문화 > 문학(105), 문화 > 예술(106), 문화 > 대중 문화(107), 문화 > 전통 문화(108), 문화 > 문화 생활 장소(109), 문화 > 문화 활동(110), 
+											      정치와 행정 > 전체(111), 정치와 행정 > 공공 기관(112), 정치와 행정 > 사법 및 치안 주체(113), 정치와 행정 > 무기(114), 정치와 행정 > 정치 및 치안 상태(115), 정치와 행정 > 정치 및 행정 행위(116), 정치와 행정 > 사법 및 치안 행위(117), 정치와 행정 > 정치 및 행정 주체(118), 자연 > 전체(119), 자연 > 지형(120), 자연 > 지표면 사물(121), 자연 > 천체(122), 자연 > 자원(123), 자연 > 재해(124), 자연 > 기상 및 기후(125), 동식물 > 전체(126), 동식물 > 동물류(127), 동식물 > 곤충류(128), 동식물 > 식물류(129), 동식물 > 동물의 부분(130), 동식물 > 식물의 부분(131), 동식물 > 동식물 행위(132), 동식물 > 동물 소리(133), 개념 > 전체(134), 개념 > 모양(135), 개념 > 성질(136), 개념 > 속도(137), 개념 > 밝기(138), 개념 > 온도(139), 개념 > 색깔(140), 개념 > 수(141), 개념 > 세는 말(142), 개념 > 양(143), 개념 > 정도(144), 개념 > 순서(145), 개념 > 빈도(146), 개념 > 시간(147), 개념 > 위치 및 방향(148), 개념 > 지역(149), 개념 > 지시(150), 개념 > 접속(151), 개념 > 의문(152), 개념 > 인칭(153)
+
+subject_cat
+
+array of integer
+
+0 ~ 106
+
+선택
+
+- 주제 및 상황 범주(기본값 0 – 전체)
+- 아래 값을 다중 선택할 수 있도록 콤마(,)로 구분하여 나열한다.
+전체(0), 인사하기(1), 소개하기(자기소개)(2), 소개하기(가족소개)(3), 개인 정보 교환하기(4), 위치 표현하기(5), 길찾기(6), 교통 이용하기(7), 물건 사기(8), 음식 주문하기(9), 요리 설명하기(10), 시간 표현하기(11), 날짜 표현하기(12), 요일 표현하기(13), 날씨와 계절(14), 하루 생활(15), 학교생활(16), 한국 생활(17), 약속하기(18), 전화하기(19), 감사하기(20), 사과하기(21), 여행(22), 주말 및 휴가(23), 취미(24), 가족 행사(25), 건강(26), 병원 이용하기(27), 약국 이용하기(28), 공공 기관 이용하기(도서관)(29), 공공 기관 이용하기(우체국)(30), 공공 기관 이용하기(출입국 관리 사무소)(31), 초대와 방문(32), 집 구하기(33), 집안일(34), 감정, 기분 표현하기(35), 성격 표현하기(36), 복장 표현하기(37), 외모 표현하기(38), 영화 보기(39), 개인 정보 교환하기(40), 교통 이용하기(41), 지리 정보(42), 물건 사기(43), 음식 설명하기(44), 요리 설명하기(45), 날씨와 계절(46), 학교생활(47), 한국 생활(48), 직업과 진로(49), 직장 생활(50), 여행(51), 주말 및 휴가(52), 취미(53), 가족 행사(54), 가족 행사(명절)(55), 건강(56), 공공기관 이용하기(57), 초대와 방문(58), 집 구하기(59), 집안일(60), 감정, 기분 표현하기(61), 성격 표현하기(62), 복장 표현하기(63), 외모 표현하기(64), 공연과 감상(65), 대중 매체(66), 컴퓨터와 인터넷(67), 사건, 사고, 재해 기술하기(68), 환경 문제(69), 문화 비교하기(70)
+												, 인간관계(71), 한국의 문학(72), 문제 해결하기(분실 및 고장)(73), 실수담 말하기(74), 연애와 결혼(75), 언어(76), 지리 정보(77), 경제∙경영(78), 식문화(79), 기후(80), 교육(81), 직업과 진로(82), 직장 생활(83), 여가 생활(84), 보건과 의료(85), 주거 생활(86), 심리(87), 외양(88), 대중문화(89), 컴퓨터와 인터넷(90), 사회 문제(91), 환경 문제(92), 사회 제도(93), 문화 차이(94), 인간관계(95), 예술(96), 건축(97), 과학과 기술(98), 법(99), 스포츠(100), 언론(101), 언어(102), 역사(103), 정치(104), 종교(105), 철학∙윤리(106)
+
+검색 출력 결과 필드(Response field): XML 형식(공통)
+
+검색 요청 변수 리스트: 요청 변수, 타입, 허용값, 필수/선택, 설명으로 구성
+필드
+
+타입
+
+필수/선택
+
+설명
+
+channel
+
+-
+
+필수
+
+결과를 포함하는 컨테이너
+
+title
+
+string
+
+필수
+
+한국어기초사전 검색 오픈 API 제목 (고정값)
+한국어기초사전 오픈 API - 사전 검색
+
+link
+
+string
+
+필수
+
+한국어기초사전 URL (고정값)
+https://krdict.korean.go.kr
+
+description
+
+string
+
+필수
+
+오픈 API 서비스 설명 (고정값)
+한국어기초사전 오픈 API – 사전 검색 결과
+
+lastBuildDate
+
+datetime
+
+필수
+
+검색 결과를 생성한 시간
+
+total
+
+integer
+
+필수
+
+검색된 전체 어휘 개수
+
+start
+
+integer
+
+필수
+
+검색 결과 시작 번호
+
+num
+
+integer
+
+필수
+
+검색 결과로 제공하는 어휘 개수
+
+검색 출력 결과 필드(Response field): XML 형식(어휘, 관용구, 속담, 뜻풀이 출력 결과)
+
+검색 요청 변수 리스트: 요청 변수, 타입, 허용값, 필수/선택, 설명으로 구성
+필드
+
+타입
+
+필수/선택
+
+설명
+
+item
+
+-
+
+필수
+
+개별 검색 결과를 포함하는 컨테이너. ‘num’ 만큼 반복함
+
+target_code
+
+integer
+
+필수
+
+식별 코드
+
+word
+
+string
+
+필수
+
+표제어
+
+sup_no
+
+integer
+
+필수
+
+동형어 번호
+
+origin
+
+string
+
+선택
+
+원어
+
+pronunciation
+
+string
+
+선택
+
+발음
+
+word_grade
+
+string
+
+선택
+
+어휘 등급
+
+pos
+
+string
+
+필수
+
+품사
+
+link
+
+string
+
+필수
+
+사전 내용 보기 URL
+
+sense
+
+string
+
+필수
+
+개별 의미를 포함하는 컨테이너
+
+sense_order
+
+integer
+
+필수
+
+개별 의미 순번
+
+definition
+
+string
+
+필수
+
+뜻풀이
+
+translation
+
+string
+
+선택
+
+개별 의미를 포함하는 컨테이너(sense의 하위 element)
+
+trans_word
+
+string
+
+선택
+
+표제어 번역
+
+trans_dfn
+
+string
+
+선택
+
+뜻풀이 번역
+
+검색 출력 결과 필드(Response field): XML 형식(용례 검색 출력 결과)
+
+검색 요청 변수 리스트: 요청 변수, 타입, 허용값, 필수/선택, 설명으로 구성
+필드
+
+타입
+
+필수/선택
+
+설명
+
+item
+
+-
+
+필수
+
+개별 검색 결과를 포함하는 컨테이너. ‘num’ 만큼 반복함
+
+target_code
+
+integer
+
+필수
+
+식별 코드
+
+word
+
+string
+
+필수
+
+표제어
+
+sup_no
+
+integer
+
+필수
+
+동형어 번호
+
+example
+
+string
+
+필수
+
+용례
+
+link
+
+string
+
+필수
+
+사전 내용 보기 URL
+
+검색 에러 메시지(error message)
+
+검색 요청 변수 리스트: 에러 코드, 에러 메세지, 설명으로 구성
+에러 코드
+
+에러 메세지
+
+설명
+
+000
+
+System error
+
+시스템 에러
+
+010
+
+Daily API Limit Exceeded
+
+하루에 허용된 API 호출 한도(50000건)을 초과
+
+020
+
+Unregistered key
+
+등록되지 않은 인증키
+
+021
+
+Your key is temporary unavailable
+
+일시적으로 사용 중지된 인증키
+
+100
+
+Incorrect query request
+
+부적절한 쿼리요청. query 필드 자체가 없는 경우에 발생하는 에러 메시지
+
+101
+
+Invalid target value
+
+부적절한 검색 필드
+
+102
+
+Invalid method value
+
+부적절한 검색 방식
+
+103
+
+Invalid num value
+
+부적절한 검색 개수
+
+104
+
+Invalid start value
+
+부적절한 start 값
+
+105
+
+Invalid sort value
+
+부적절한 정렬순
+
+106
+
+Invalid part value
+
+부적절한 검색 대상 값
+
+107
+
+Invalid translated value
+
+부적절한 다국어 번역 여부 대상 값
+
+108
+
+Invalid trans_lang value
+
+부적절한 번역 언어 대상 값
+
+109
+
+Invalid advanced value
+
+부적절한 자세히 찾기 여부
+
+110
+
+Invalid lang value
+
+부적절한 언어 값
+
+200
+
+Invalid type1 value
+
+부적절한 type1 값
+
+201
+
+Invalid type2 value
+
+부적절한 type2 값
+
+203~209
+
+-
+
+예약
+
+210
+
+Invalid pos value
+
+부적절한 품사
+
+211
+
+Invalid level value
+
+부적절한 등급별 어휘
+
+212
+
+Invalid multimedia value
+
+부적절한 멀티미디어
+
+213
+
+Invalid sense_cat value
+
+부적절한 의미 범주
+
+214
+
+Invalid subject_cat value
+
+부적절한 주제 및 상황 범주
+
+215
+
+Invalid letter_s value
+
+부적절한 음절 수 시작
+
+216
+
+Invalid letter_e value
+
+부적절한 음절 수 종료
+
+어휘 검색 시 출력 XML 예제
+
+<?xml version="1.0" encoding="UTF-8" ?>
+<channel>
+
+<title>한국어 기초사전 개발 지원(Open API) - 사전 검색</title>
+<link>https://krdict.korean.go.kr</link>
+<description>한국어 기초사전 개발 지원(Open API) - 사전 검색 결과</description>
+<lastBuildDate>2017-11-14 14:12:51</lastBuildDate>
+<total>53</total>
+<start>1</start>
+<num>10</num>
+<item>
+
+<target_code>32750</target_code>
+<word>나무</word>
+<sup_no>0<sup_no>
+<pronunciation>나무<pronunciation>
+<word_grade>초급<word_grade>
+<pos>명사</pos>
+<link>https://krdict.korean.go.kr/dicSearch/SearchView?paraWordNo=32750</link>
+<sense>
+
+<sense_order>1</sense_order>
+<definition>줄기나 가지가 목질로 된 여러해살이 식물.</definition>
+<translation>
+
+<trans_lang>영어</trans_lang>
+<trans_word>tree</trans_word>
+<trans_dfn>A plant with a hard stem, branches and leaves.</trans_dfn>
+
+</translation>
+<translation>
+
+<trans_lang>일본어</trans_lang>
+<trans_word>き【木・樹】。じゅもく【樹木】</trans_word>
+<trans_dfn>しっかりした幹に枝と葉がついた、数年間にわたって育つ植物。</trans_dfn>
+
+</translation>
+
+</sense>
+<sense>
+
+<sense_order>2</sense_order>
+<definition>집이나 가구 등을 만드는 데 사용하는 재목.</definition>
+<translation>
+
+<trans_lang>영어</trans_lang>
+<trans_word>wood</trans_word>
+<trans_dfn>The material used to build a house or to make furniture.</trans_dfn>
+
+</translation>
+<translation>
+
+<trans_lang>일본어</trans_lang>
+<trans_word>き【木・樹】。ざいもく【材木】</trans_word>
+<trans_dfn>住宅や家具などを作るのに用いる材木。</trans_dfn>
+
+</translation>
+
+</sense>
+<sense>
+
+<sense_order>3</sense_order>
+<definition>불을 때기 위해 베어 놓은 나무의 줄기나 가지.</definition>
+<translation>
+
+<trans_lang>영어</trans_lang>
+<trans_word>timber; log</trans_word>
+<trans_dfn>The trunk or branches of a tree cut to be used as firewood.</trans_dfn>
+
+</translation>
+<translation>
+
+<trans_lang>일본어</trans_lang>
+<trans_word>まき・たきぎ【薪】</trans_word>
+<trans_dfn>火をたくために切った木の幹や枝。</trans_dfn>
+
+</translation>
+
+</sense>
+
+</item>
+<item>
+
+</channel>
+
+용례 검색 시 출력 XML 예제
+
+<?xml version="1.0" encoding="UTF-8" ?>
+<channel>
+
+<title>한국어 기초사전 개발 지원(Open API) - 사전 검색</title>
+
+<link>https://krdict.korean.go.kr</link>
+<description>한국어 기초사전 개발 지원(Open API) - 사전 검색 결과</description>
+<lastBuildDate>2017-11-14 14:24:31</lastBuildDate>
+<total>2277</total>
+<start>1</start>
+<num>10</num>
+<item>
+
+<target_code>27965</word>
+<word>가공성</word>
+<sup_no>0</sup_no>
+<example>나무가 지나치게 단단하면 변형이 어려워 가공성이 떨어진다. </example>
+<link>https://krdict.korean.go.kr/dicSearch/SearchView?ParaWordNo=27965</link>
+
+</item>
+<item>
+
+<target_code>28027</word>
+<word>가공하다</word>
+<sup_no>1</sup_no>
+<example>집 앞 공장에서는 나무를 가공하여 여러 가지 가구를 만든다. </example>
+<link>https://krdict.korean.go.kr/dicSearch/SearchView?ParaWordNo=28027</link>
+
+</item>
+
+</channel>
+
+검색 출력 에러메시지 XML 예시
+
+검색 출력 에러메시지 XML 예시: 에러 메시지 XML 구조, 에러 메시지 XML 예시로 구성
+에러 메시지 XML 구조
+
+에러 메시지 XML 예시
+
+<?xml version="1.0" encoding="UTF-8" ?>
+<error>
+
+<error_code>에러코드</error_code>
+<message>에러메시지 </message>
+
+</error>
+
+<?xml version="1.0" encoding="UTF-8" ?>
+<error>
+
+<error_code>020</error_code>
+<message>Unregistered key</message>
+
+</error>
+
+오픈 API 요청 URL
+
+https://krdict.korean.go.kr/api/view
+
+검색 요청 변수(Request Parameters)
+
+검색 요청 변수 리스트: 요청 변수, 타입, 허용값, 필수/선택, 설명으로 구성
+요청 변수
+
+타입
+
+허용값
+
+필수/선택
+
+설명
+
+key
+
+String
+
+16진수 32자리
+
+필수
+
+인증키
+
+method
+
+String
+
+word_info
+target_code
+
+필수
+
+-검색 방식(기본값 word_info)
+word_info: 표제어 정보(표제어 + 어깨 번호)
+target_code: *대상 코드(target_code)
+
+q
+
+string
+
+-
+
+필수
+
+- 검색어(UTF-8 인코딩)
+method 입력 값이 'word_info 경우 어휘 정보 입력
+method 입력 값이 'target_code'일 경우 대상 코드 입력
+
+translated
+
+string
+
+n
+y
+
+선택
+
+- 다국어 번역 여부(기본값-n)
+y일 경우 번역 언어 변수가 적용된다.
+
+trans_lang
+
+string
+
+0-11
+
+선택
+
+※ 요청변수 ‘translated(다국어 번역 )’이 ‘y’일 경우 설정할 수 있다.
+- 번역 언어(기본값 0 - 전체 번역 언어)
+- 아래 값을 다중 선택할 수 있도록 콤마(,)로 구분하여 나열한다.
+전체(0), 영어(1), 일본어(2), 프랑스어(3), 스페인어(4), 아랍어(5), 몽골어(6), 베트남어(7), 타이어(8), 인도네시아어(9), 러시아어(10), 중국어(11)
+
+검색 출력 결과 필드(Response field): XML 형식
+
+검색 요청 변수 리스트: 필드, 타입, 필수/선택, 설명으로 구성
+필드
+
+타입
+
+필수/선택
+
+설명
+
+channel
+
+-
+
+필수
+
+결과를 포함하는 컨테이너
+
+title
+
+String
+
+필수
+
+한국어 기초사전 오픈 API - 사전 내용 검색
+
+link
+
+String
+
+필수
+
+한국어 기초사전 사전 내용 URL
+
+description
+
+String
+
+필수
+
+한국어 기초사전 오픈 API - 사전 내용 검색 결과
+
+lastBuildDate
+
+datetime
+
+필수
+
+검색 결과를 생성한 시간
+
+item
+
+-
+
+필수
+
+전체 결과를 포함하는 컨테이너
+
+target_code
+
+integer
+
+필수
+
+대상 코드(고유한 구분 KEY값 - 검색, 내용 보기 연계에 사용)
+
+word_info
+
+-
+
+필수
+
+형태 항목을 포함하는 컨테이너
+
+word
+
+String
+
+필수
+
+표제어
+
+word_unit
+
+String
+
+필수
+
+구성 단위
+
+pos
+
+String
+
+필수
+
+품사
+
+word_type
+
+String
+
+필수
+
+고유어 여부
+
+original_language_info
+
+-
+
+-
+
+원어 항목을 포함하는 컨테이너
+
+original_language
+
+String
+
+필수
+
+원어
+
+language_type
+
+String
+
+필수
+
+언어
+
+pronunciation_info
+
+-
+
+-
+
+발음 항목을 포함하는 컨테이너
+
+pronunciation
+
+String
+
+필수
+
+발음
+
+conju_info
+
+-
+
+-
+
+활용, 준말 항목을 포함하는 컨테이너
+
+conjugation_info
+
+-
+
+-
+
+활용 항목을 포함하는 컨테이너
+
+conjugation
+
+String
+
+필수
+
+활용
+
+pronunciation_info
+
+-
+
+-
+
+활용 발음 항목을 포함하는 컨테이너
+
+pronunciation
+
+String
+
+필수
+
+발음
+
+abbreviation_info
+
+-
+
+-
+
+준말 항목을 포함하는 컨테이너
+
+abbreviation
+
+String
+
+필수
+
+준말
+
+pronunciation_info
+
+-
+
+-
+
+준말 발음 항목을 포함하는 컨테이너
+
+pronunciation
+
+String
+
+필수
+
+발음
+
+der_info
+
+-
+
+-
+
+파생어 항목을 포함하는 컨테이너
+
+word
+
+String
+
+필수
+
+표제어
+
+link_type
+
+String
+
+필수
+
+연결 유형(C : 링크 대상 코드 있음, T : 링크 대상 코드 없음)
+
+link_target_code
+
+String
+
+선택
+
+링크 대상 코드
+
+link
+
+String
+
+필수
+
+링크
+
+ref_info
+
+-
+
+-
+
+가봐라 항목을 포함하는 컨테이너
+
+word
+
+String
+
+필수
+
+표제어
+
+link_type
+
+String
+
+필수
+
+연결 유형(C : 링크 대상 코드 있음, T : 링크 대상 코드 없음)
+
+link_target_code
+
+String
+
+선택
+
+링크 대상 코드
+
+link
+
+String
+
+필수
+
+링크
+
+word_grade
+
+String
+
+필수
+
+어휘 등급
+
+category_info
+
+-
+
+-
+
+범주 항목을 포함하는 컨테이너
+
+type
+
+String
+
+필수
+
+유형
+
+written_form
+
+String
+
+필수
+
+내용
+
+reference
+
+String
+
+필수
+
+참고
+
+allomorph
+
+String
+
+필수
+
+이형태
+
+sense_info
+
+-
+
+-
+
+의미 항목을 포함하는 컨테이너
+
+definition
+
+String
+
+필수
+
+뜻풀이
+
+reference
+
+String
+
+필수
+
+참고
+
+pattern_info
+
+-
+
+-
+
+문형 항목을 포함하는 컨테이너
+
+pattern
+
+String
+
+필수
+
+문형
+
+pattern_reference
+
+String
+
+필수
+
+문형 참고
+
+example_info
+
+-
+
+-
+
+용례 항목을 포함하는 컨테이너
+
+type
+
+String
+
+필수
+
+유형
+
+example
+
+String
+
+필수
+
+용례
+
+rel_info
+
+-
+
+-
+
+관련어 항목을 포함하는 컨테이너
+
+word
+
+String
+
+필수
+
+표제어
+
+type
+
+String
+
+필수
+
+유형
+
+link_type
+
+String
+
+필수
+
+연결 유형(C : 링크 대상 코드 있음, T : 링크 대상 코드 없음)
+
+link_target_code
+
+String
+
+선택
+
+링크 대상 코드
+
+link
+
+String
+
+필수
+
+링크
+
+multimedia_info
+
+-
+
+-
+
+멀티미디어 항목을 포함하는 컨테이너
+
+label
+
+String
+
+필수
+
+제목
+
+type
+
+String
+
+필수
+
+유형
+
+link
+
+String
+
+필수
+
+링크
+
+subword_info
+
+-
+
+-
+
+부표제어 항목을 포함하는 컨테이너
+
+subword
+
+String
+
+필수
+
+부표제어
+
+subword_unit
+
+String
+
+필수
+
+부표제어 구성 단위
+
+reference
+
+String
+
+필수
+
+부표제어 참고
+
+subsense_info
+
+-
+
+-
+
+부표제어 의미 항목을 포함하는 컨테이너
+
+definition
+
+String
+
+필수
+
+뜻풀이
+
+reference
+
+String
+
+필수
+
+참고
+
+pattern_info
+
+-
+
+-
+
+문형 항목을 포함하는 컨테이너
+
+pattern
+
+String
+
+필수
+
+문형
+
+pattern_reference
+
+String
+
+필수
+
+문형 참고
+
+example_info
+
+-
+
+-
+
+용례 항목을 포함하는 컨테이너
+
+type
+
+String
+
+필수
+
+유형
+
+example
+
+String
+
+필수
+
+용례
+
+rel_info
+
+-
+
+-
+
+관련어 항목을 포함하는 컨테이너
+
+word
+
+String
+
+필수
+
+표제어
+
+type
+
+String
+
+필수
+
+유형
+
+검색 에러 메시지(error message)
+
+검색 요청 변수 리스트: 에러 코드, 에러 메세지, 설명으로 구성
+에러 코드
+
+에러 메세지
+
+설명
+
+000
+
+System error
+
+시스템 에러
+
+020
+
+Unregistered key
+
+등록되지 않은 인증키
+
+021
+
+Your key is temporary unavailable
+
+일시적으로 사용 중지된 인증키
+
+100
+
+Incorrect query request
+
+부적절한 쿼리요청. query 필드 자체가 없는 경우에 발생하는 에러 메시지
+
+101
+
+Invalid target value
+
+부적절한 검색 필드
+
+102
+
+Invalid method value
+
+부적절한 검색 방식
+
+107
+
+Invalid translated value
+
+부적절한 다국어 번역 여부 대상 값
+
+108
+
+Invalid trans_lang value
+
+부적절한 번역 언어 대상 값
+
+어휘 검색 시 출력 XML 예제
+
+<?xml version="1.0" encoding="UTF-8" ?>
+<channel>
+
+<title>한국어 기초사전 개발 지원(Open API) - 사전 내용 검색</title>
+<link>https://krdict.korean.go.kr/dicSearch/SearchView?ParaWordNo=32750</link>
+<description>한국어 기초사전 개발 지원(Open API) - 사전 내용 검색 결과</description>
+<lastBuildDate>2017-11-14 14:12:51</lastBuildDate>
+<total>1</total>
+<item>
+
+<target_code>32750</target_code>
+<word_info>
+
+<word>나무</word>
+<sup_no>0</sup_no>
+<word_unit>단어</word_unit>
+<pos>명사</pos>
+<word_type>고유어</word_unit>
+<pronunciation_info>
+
+<pronunciation>나무</pronunciation>
+
+</pronunciation_info>
+<pos>명사</pos>
+<der_info>
+
+<word>나무하다</word>
+<link_type>C</link_type>
+<link_target_code>38847</link_target_code>
+<link>https://krdict.korean.go.kr/dicSearch/SearchView?ParaWordNo=38847</link>
+
+</der_info>
+<word_grade>초급</word_grade>
+<category_info>
+
+<type>의미 범주</type>
+<written_form>동식물 > 식물류</written_form>
+
+</category_info>
+<sense_info>
+
+<definition>단단한 줄기에 가지와 잎이 달린, 여러 해 동안 자라는 식물.</definition>
+
+</sense_info>
+
+</word_info>
+
+</item>
+
+</channel>
+
+검색 출력 에러메시지 XML 예시
+
+검색 출력 에러메시지 XML 예시: 에러 메시지 XML 구조, 에러 메시지 XML 예시로 구성
+에러 메시지 XML 구조
+
+에러 메시지 XML 예시
+
+<?xml version="1.0" encoding="UTF-8" ?>
+<error>
+
+<error_code>에러코드</error_code>
+<message>에러메시지 </message>
+
+</error>
+
+<?xml version="1.0" encoding="UTF-8" ?>
+<error>
+
+<error_code>020</error_code>
+<message>Unregistered key</message>
+
+</error>
+
+도움말
+
+저작권 정책
+
+알립니다
+
+개발 지원(Open API)
+
+의견 제시
+
+사전 전체 내려받기
+
+한국어교수학습샘터
+한국어학습자말뭉치나눔터
+국립국어원
+표준국어대사전
+우리말샘
+한국수어사전
+이동
+

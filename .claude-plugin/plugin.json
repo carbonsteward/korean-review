@@ -1,0 +1,13 @@
+{
+  "name": "jjakmal",
+  "version": "0.0.1",
+  "description": "짝말 (jjakmal) — evidence-based Korean naturalness & collocation verification. 한국어 표현이 자연스러운지 말뭉치·사전 근거로 검증합니다. Ships three CLI tools, a verification skill, slash-commands, and subagents.",
+  "author": {
+    "name": "carbonsteward",
+    "url": "https://github.com/carbonsteward"
+  },
+  "homepage": "https://github.com/carbonsteward/jjakmal",
+  "repository": "https://github.com/carbonsteward/jjakmal",
+  "license": "MIT",
+  "keywords": ["korean", "nlp", "collocation", "naturalness", "translation", "linguistics", "corpus", "translationese", "jjakmal", "짝말"]
+}

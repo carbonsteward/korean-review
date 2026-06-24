@@ -1,0 +1,143 @@
+#!/usr/bin/env python3
+"""korpora-search — Korean corpus concordance CLI (Korpora 기반)
+
+사용:
+  korpora-search <단어>                          기본 corpus(nsmc)에서 단어 등장 문장 찾기
+  korpora-search <단어> --corpus modu_news       특정 corpus
+  korpora-search <단어> --limit 5                결과 개수 제한 (기본 10)
+  korpora-search <단어> --list                   사용 가능 corpus 목록
+  korpora-search <단어> --download <corpus>      corpus 다운로드 (~/Korpora/)
+
+권장 corpus (한국어 자연성 검증):
+  - nsmc                 NAVER 영화 리뷰 (구어, 200K 문장)
+  - korean_petitions     청와대 청원 (격식체)
+  - kcbert               댓글 corpus (구어 + 비격식)
+  - korean_chatbot_data  Q&A pairs
+
+NIKL 모두의 말뭉치 (modu_*) 는 별도 인증 필요 — corpus.korean.go.kr 에서 다운로드 후 사용.
+
+출력: 매칭 문장 + corpus 출처
+"""
+import argparse
+import sys
+import warnings
+
+warnings.filterwarnings("ignore")
+
+try:
+    from Korpora import Korpora
+except ImportError:
+    print("Korpora 패키지가 설치되지 않았습니다. pip install Korpora", file=sys.stderr)
+    sys.exit(2)
+
+
+def list_corpora():
+    print("=== 사용 가능 Korpora corpus ===")
+    for c in Korpora.corpus_list():
+        print(f"  {c}")
+
+
+def download(corpus_name):
+    print(f"Downloading: {corpus_name} → ~/Korpora/")
+    Korpora.fetch(corpus_name)
+    print("완료.")
+
+
+def extract_text(item):
+    """다양한 Korpora data structure에서 본문 추출."""
+    for attr in ("text", "sentence", "review", "title", "body"):
+        v = getattr(item, attr, None)
+        if isinstance(v, str) and v.strip():
+            return v
+    if hasattr(item, "pair"):
+        return str(item.pair)
+    return str(item)
+
+
+def search(corpus_name, word, limit):
+    import builtins
+    import contextlib
+    import io
+    # Large corpora (kowikitext, namuwikitext, modu_*) prompt interactively
+    # ("insert `yes`") before loading into memory; the wrapper feeds no stdin, so
+    # without this the load died with EOFError. Auto-confirm, and suppress Korpora's
+    # stdout banner (license/description) so it doesn't pollute the concordance.
+    _orig_input = builtins.input
+    builtins.input = lambda *a, **k: "yes"
+    try:
+        with contextlib.redirect_stdout(io.StringIO()):
+            corpus = Korpora.load(corpus_name, root_dir=None)
+    except Exception as e:
+        print(f"'{corpus_name}' 로드 실패: {e}", file=sys.stderr)
+        print(f"먼저 다운로드하세요: korpora-search --download {corpus_name}", file=sys.stderr)
+        print(f"또는 corpus 이름을 확인하세요: korpora-search --list", file=sys.stderr)
+        sys.exit(2)
+    finally:
+        builtins.input = _orig_input
+
+    # try train_data, then test_data, then iterate
+    datasets = []
+    for attr in ("train", "test", "dev", "data", "train_data"):
+        d = getattr(corpus, attr, None)
+        if d is not None:
+            datasets.append((attr, d))
+
+    if not datasets:
+        # treat corpus itself as iterable
+        datasets = [("corpus", corpus)]
+
+    hits = 0
+    print(f"=== '{word}' 검색 in {corpus_name} ===\n")
+    for ds_name, ds in datasets:
+        try:
+            iter(ds)
+        except TypeError:
+            continue
+        for item in ds:
+            text = extract_text(item)
+            if not text:
+                continue
+            if word in text:
+                # context window
+                idx = text.find(word)
+                start = max(0, idx - 40)
+                end = min(len(text), idx + len(word) + 40)
+                snippet = text[start:end].replace("\n", " ")
+                marker = " ".join([
+                    text[start:idx],
+                    f"【{word}】",
+                    text[idx + len(word):end],
+                ]).replace("\n", " ")
+                print(f"[{ds_name}] ...{marker}...")
+                hits += 1
+                if hits >= limit:
+                    print(f"\n  (총 {hits}건 출력, --limit으로 더 많이)")
+                    return
+    if hits == 0:
+        print(f"  (매칭 없음)")
+    else:
+        print(f"\n  (총 {hits}건)")
+
+
+def main():
+    ap = argparse.ArgumentParser(description="Korean corpus concordance 검색")
+    ap.add_argument("word", nargs="?", help="검색어")
+    ap.add_argument("--corpus", default="nsmc", help="corpus name (기본 nsmc)")
+    ap.add_argument("--limit", type=int, default=10, help="결과 개수 (기본 10)")
+    ap.add_argument("--list", action="store_true", help="사용 가능 corpus 목록")
+    ap.add_argument("--download", help="corpus 다운로드")
+    args = ap.parse_args()
+
+    if args.list:
+        list_corpora()
+        return
+    if args.download:
+        download(args.download)
+        return
+    if not args.word:
+        ap.error("검색어 필수 (또는 --list / --download)")
+    search(args.corpus, args.word, args.limit)
+
+
+if __name__ == "__main__":
+    main()

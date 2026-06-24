@@ -1,0 +1,601 @@
+국립국어원 표준국어대사전검색 바로가기
+본문 바로가기
+
+이 누리집은 대한민국 공식 전자정부 누리집입니다.
+ 
+
+통합검색찾기
+자세히 찾기
+
+들어가기
+회원 가입
+
+ 내가 살펴본 단어
+ 내 단어장
+
+ 단어장에 추가
+ 
+ 전체 삭제
+ 
+
+단어장을 선택해 주세요.
+
++새 단어장 추가
+
+추가취소
+
+ 새로운 단어장에 단어를 등록합니다.
+ 
+
+ 단어장 이름을 입력해 주세요.
+ 
+
+추가취소
+
+확대하기축소하기인쇄하기내 단어장내가 살펴본 단어일러두기도움말
+오픈 API
+오픈 API 소개오픈 API 사용 신청오픈 API 예시
+1. 표준국어대사전 오픈 API 서비스 소개
+표준국어대사전 오픈 API는 검색 플랫폼을 외부에 공개하여 다양하고 재미있는 서비스 및 애플리케이션을 개발할 수 있도록 외부 개발자와 사용자들이 공유하는 프로그램입니다. 표준국어대사전에 구축된 양질의 사전 정보를 개인 또는 기관에서 오픈 API를 이용해 자유롭게 이용할 수 있도록 제공합니다.
+※ 오픈 API란?
+하나의 웹 사이트에서 자신이 가진 기능을 이용할 수 있도록 공개한 프로그래밍 인터페이스를 오픈 API라고 합니다.
+
+2. 표준국어대사전 오픈 API 서비스 인증 키 발급
+오픈 API 서비스를 이용하기 위해서는 먼저 인증 키를 발급받아야 합니다. 인증 키가 올바르지 않은 경우에는 서비스 이용이 제한됩니다. 인증 키가 유효하지 않거나 인증 키를 분실한 경우에는 인증 키를 재발급받아야 합니다.
+3. 표준국어대사전 오픈 API 서비스 이용 안내
+연계 표준 서비스를 이용하기 위한 XML, JSON 기반의 데이터 형식, 갱신 데이터 요청 변수, 반환되는 코드값을 제공합니다.
+사전 검색 오픈 API사전 내용 오픈 API
+- 오픈 API 요청 URL
+https://stdict.korean.go.kr/api/search.do
+- 검색 요청 변수(Request Parameters)
+검색요청 정보요청 변수타입허용값필수/선택설명
+keystring16진수 32자리필수인증 키
+qstring-필수검색어(UTF-8 인코딩)
+req_typestringxmljson선택요청 타입(기본값 xml)
+startinteger 1~1000선택검색의 시작 번호(기본값 1)
+numinteger 10~100선택결과 출력 건수(기본값 10)
+advancedstringn
+y
+선택- 자세히 찾기 여부(기본값 n)
+y: 자세히 찾기 사용
+n: 자세히 찾기 미사용
+
+※ 하단의 요청 변수들을 사용하시려면 자세히 찾기 여부(기본값 n)인 "advanced" 요청 변수를 'y'로 하셔야 합니다.
+targetinteger1 ~ 11선택- 찾을 대상(기본값 1)
+1: 표제어
+2: 원어
+3: 어원
+4: 발음
+5: 활용
+6: 문형
+7: 문법
+8: 뜻풀이
+9: 용례
+10: 용례 출전
+11: 용례 번역
+
+methodstringexact
+include
+start
+end
+wildcard
+선택- 검색 방식(기본값: exact)
+exact: 일치 검색
+include: 포함 검색
+start: 시작
+end: 끝
+wildcard: 와일드카드 검색
+
+type1array of stringall
+word
+phrase
+idiom
+proverb
+선택- 구분 1(기본값 all)
+all: 전체
+- 아래 값을 다중 선택할 수 있도록 콤마(,)로 구분하여 나열한다.
+word: 어휘
+phrase: 구
+idiom: 관용구
+proverb: 속담
+
+type2array of stringall
+native
+chinese
+loanword
+hybrid
+선택- 구분 2(기본값 all)
+all: 전체
+- 아래 값을 다중 선택할 수 있도록 콤마(,)로 구분하여 나열한다.
+native: 고유어
+chinese: 한자어
+loanword: 외래어
+hybrid: 혼종어
+
+posarray of integer0~15선택- 품사(기본값 0)
+0: 전체
+- 아래 값을 다중 선택할 수 있도록 콤마(,)로 구분하여 나열한다.
+1: 명사
+2: 대명사
+3: 수사
+4: 조사
+5: 동사
+6: 형용사
+7: 관형사
+8: 부사
+9: 감탄사
+10: 접사
+11: 의존 명사
+12: 보조 동사
+13: 보조 형용사
+14: 어미
+15: 품사 없음
+
+catarray of integer0~67선택- 전문 분야(기본값 0)
+0: 전체
+- 아래 값을 다중 선택할 수 있도록 콤마(,)로 구분하여 나열한다.
+1: 언어
+2: 문학
+3: 역사
+4: 철학
+5: 교육
+6: 민속
+7: 인문 일반
+8: 법률
+9: 군사
+10: 경영
+11: 경제
+12: 복지
+13: 정치
+14: 매체
+15: 행정
+16: 심리
+17: 사회 일반
+18: 지구
+19: 지리
+20: 해양
+21: 천문
+22: 환경
+23: 생명
+24: 동물
+25: 식물
+26: 천연자원
+27: 수학
+28: 물리
+29: 화학
+30: 자연 일반
+31: 농업
+32: 수산업
+33: 임업
+34: 광업
+35: 공업
+36: 서비스업
+37: 산업 일반
+38: 의학
+39: 약학
+40: 한의
+41: 수의
+42: 식품
+43: 보건 일반
+44: 건설
+45: 교통
+46: 기계
+47: 전기·전자
+48: 재료
+49: 정보·통신
+50: 공학 일반
+51: 체육
+52: 연기
+53: 영상
+54: 무용
+55: 음악
+56: 미술
+57: 복식
+58: 공예
+59: 예체능 일반
+60: 가톨릭
+61: 기독교
+62: 불교
+63: 종교 일반
+64: 인명
+65: 지명
+66: 책명
+67: 고유명 일반
+
+multimediaarray of integer0~6선택- 멀티미디어(기본값 0)
+0: 전체
+- 아래 값을 다중 선택할 수 있도록 콤마(,)로 구분하여 나열한다.
+1: 사진
+2: 삽화
+3: 동영상
+4: 애니메이션
+5: 소리
+6: 없음
+
+letter_sinteger1 ~ 선택- 음절 수 시작(기본값 1)
+letter_einteger1 ~ 선택- 음절 수 끝(기본값 1)
+update_sintegeryyyymmdd선택- 고친 날짜 시작일
+update_eintegeryyyymmdd선택- 고친 날짜 종료일
+- 검색 출력 결과 필드(Response field)
+검색 출력 결과 필드필드타입설명
+channel-결과를 포함하는 컨테이너
+titlestring표준국어대사전 오픈 API 제목 (고정값: 표준국어대사전 오픈 API - 사전 검색)
+linkstring표준국어대사전 URL(고정값: https://stdict.korean.go.kr)
+descriptionstring오픈 API 서비스 설명(고정값: 표준국어대사전 오픈 API – 사전 검색 결과)
+lastBuildDatedatetime검색 결과를 생성한 시간
+totalinteger검색된 전체 어휘 개수
+startinteger검색 결과 시작 번호
+numinteger검색 결과로 제공하는 어휘 개수
+num_senseinteger검색 결과로 제공하는 의미 개수
+item-개별 검색 결과를 포함하는 컨테이너. ‘num’만큼 반복함
+wordstring표제어
+sup_nostring어깨번호
+sense-개별 의미를 포함하는 컨테이너
+sense_nostring의미 번호
+definitionstring뜻풀이
+posstring품사
+linkstring사전 내용 보기 URL
+typestring범주(일반어)
+catstring전문 분야
+originstring원어
+syntacticArgumentstring문형
+syntacticAnnotationstring문법
+- 검색 에러 메시지(error message)
+검색 에러 메시지 설명에러 코드에러 메시지설명
+000System error시스템 에러
+020Unregistered key등록되지 않은 키
+021Your key is temporary unavailable일시적으로 사용 중지된 인증 키
+100Incorrect query request부적절한 쿼리 요청. query 필드 자체가 없는 경우에 발생하는 에러 메시지
+101Invalid target value부적절한 검색 필드
+102Invalid method value부적절한 검색 방식
+103Invalid num value부적절한 검색 개수
+104Invalid start value부적절한 start 값
+105Invalid sort value부적절한 정렬순
+106Invalid advanced value부적절한 자세히 찾기 여부
+200Invalid type1 value부적절한 type1 값
+201Invalid type2 value부적절한 type2 값
+202~209 - 예약
+210Invalid pos value부적절한 품사
+212Invalid cat value부적절한 전문 분야
+213Invalid multimedia value부적절한 멀티미디어
+214Invalid letter_s value부적절한 음절 수 시작
+215Invalid letter_e value부적절한 음절 수 종료
+216Invalid update_s value부적절한 고친 날짜 시작일
+217Invalid update_e value부적절한 고친 날짜 종료일
+- 검색 출력 메시지 XML 예시
+
+ <?xml version="1.0" encoding="UTF-8" ?>
+ <xml version="2.0">
+ <channel>
+ <title> 표준 국어 대사전 개발 지원(Open API) - 사전 검색 </title>
+ <link> https://stdict.korean.go.kr </link>
+ <description> 표준 국어 대사전 개발 지원(Open API) – 사전 검색 결과</description>
+ <lastBuildDate> 20190115141020</lastBuildDate>
+ <total>5</total>
+ <start>1</start>
+ <num>10</num>
+ <item>
+ <target_code>404765</target_code>
+ <word>나무</word>
+ <sup_no>1</sup_no>
+ <pos>명사</pos>
+ <sense>
+ <definition> 줄기나 가지가 목질로 된 여러해살이 식물.</definition>
+ <link><![CDATA[https://stdict.korean.go.kr/search/searchView.do?word_no=404765&searchKeywordTo=3]]></link>
+ <type>일반어</type>
+ </sense>
+ </item>
+ <item>
+ <target_code>57033</target_code> 
+ <word>나무</word>
+ <sup_no>2</sup_no>
+ <pos>명사</pos>
+ <sense>
+ <definition>소 장수들의 은어로, 팔백 냥을 이르던 말.</definition>
+ <link><![CDATA[https://stdict.korean.go.kr/search/searchView.do?word_no=57033&searchKeywordTo=3]]></link>
+ <type>일반어</type>
+ </sense>
+ </item>
+ </channel>
+ </xml> 
+ 
+- 검색 출력 메시지 XML 예시
+검색 에러 메시지 설명에러 메시지 XML 구조에러 메시지 XML 예시
+<?xml version="1.0" encoding="UTF-8" ?>
+<error>
+<error_code>에러 코드</error_code>
+<message>에러 메시지 </message>
+</error>
+
+<?xml version="1.0" encoding="UTF-8" ?>
+<error>
+<error_code>020</error_code>
+<message>Unregistered key </message>
+</error>
+
+- 검색 출력 메시지 JSON 예시
+
+ {
+ "channel": {
+ "title": "표준 국어 대사전 개발 지원(Open API) - 사전 검색 ",
+ "link": "https://stdict.korean.go.kr",
+ "description": "표준 국어 대사전 개발 지원(Open API) – 사전 검색 결과",
+ "lastbuilddate": "20190115141020",
+ "total": 5,
+ "start": 1,
+ "num": 10,
+ "item": [
+ {
+ "target_code": 404765,
+ "word": "나무",
+ "sup_no": 1,
+ "pos": "명사",
+ "sense": {
+ "definition": "줄기나 가지가 목질로 된 여러해살이 식물.",
+ "link": {
+ https://stdict.korean.go.kr/search/searchView.do?word_no=404765&searchKeywordTo=3
+ },
+ "type": "일반어"
+ }
+ },
+ {
+ "target_code": 57033,
+ "word": "나무",
+ "sup_no": 2,
+ "pos": "명사",
+ "sense": {
+ "definition": "소 장수들의 은어로, 팔백 냥을 이르던 말.",
+ "link": {
+ https://stdict.korean.go.kr/search/searchView.do?word_no=57033&searchKeywordTo=3
+ },
+ "type": "일반어"
+ }
+ }
+ ]
+ }
+ }
+ 
+- 검색 출력 메시지 JSON 예시
+검색 에러 메시지 설명에러 메시지 JSON 구조에러 메시지 JSON 예시
+{
+"error": {
+"error_code": "에러 코드",
+"message": "에러 메시지 "
+}
+}
+
+{
+"error": {
+"error_code": 20,
+"message": "Unregistered key "
+}
+}
+
+- 오픈 API 요청 URL
+https://stdict.korean.go.kr/api/view.do
+- 검색 요청 변수(Request Parameters)
+검색 요청 설명요청 변수타입허용값필수/선택설명
+keystring16진수 32자리필수인증 키
+methodstring
+ word_info
+ 
+
+ target_code
+ 필수
+ -검색 방식(기본값 word_info)
+ 
+
+ word_info: 표제어 정보(표제어 + 어깨번호)
+ 
+
+ target_code: *대상 코드(target_code)
+ 
+req_typestringxmljson선택요청 타입(기본값 xml)
+qstring-필수검색어(UTF-8 인코딩)
+- 검색 출력 결과 필드(Response field)
+검색 출력 결과 필드 설명상위 필드필드타입필수/선택설명
+-channel-필수결과를 포함하는 컨테이너
+channeltitleString필수표준국어대사전 오픈 API 제목 (고정값: 표준국어대사전 오픈 API - 사전 검색)
+channellinkString필수표준국어대사전 URL
+channeldescriptionString필수오픈 API 서비스 설명(고정값: 표준국어대사전 오픈 API – 사전 내용 검색 결과)
+channellastBuildDatedatetime필수검색 결과를 생성한 시간
+channeltotalinteger필수검색 건수('1' 결과 있음, '0' 결과 없음)
+channelitem-필수사전 전체 항목을 포함하는 컨테이너
+itemtarget_codeString필수표제어
+itemword_info-필수형태 항목을 포함하는 컨테이너
+word_infowordString필수표제어
+word_infoword_unitString필수구성 단위
+word_infoword_typeString필수고유어 여부
+word_infooriginal_language_info-필수원어 항목을 포함하는 컨테이너
+original_language_infooriginal_languageString필수원어
+original_language_infolanguage_typeString필수언어
+original_language_infolanguage_typeString필수언어
+word_infopronunciation_info-필수발음 항목을 포함하는 컨테이너
+pronunciation_infopronunciationString필수발음
+word_infoconju_info-필수활용, 준말 항목을 포함하는 컨테이너
+conju_infoconjugation_info-필수활용 항목을 포함하는 컨테이너
+conjugation_infoconjugationString필수활용
+conjugation_infopronunciation_info-필수발음 항목을 포함하는 컨테이너
+pronunciation_infopronunciationString필수발음
+conju_infoabbreviation_info-필수준말 항목을 포함하는 컨테이너
+abbreviation_infoabbreviationString필수준말
+abbreviation_infopronunciation_info-필수발음 항목을 포함하는 컨테이너
+pronunciation_infopronunciationString필수발음
+word_inforelation_info-필수관련 어휘 항목을 포함하는 컨테이너
+relation_infowordString필수표제어
+relation_infotypeString필수유형
+relation_infolink_target_codeString필수링크 대상 코드
+relation_infolinkString필수링크
+word_infooriginString필수어원
+word_infoallomorphString필수이형태
+word_infolexical_info-필수어휘 관계를 포함하는 컨테이너
+lexical_infowordString필수표제어
+lexical_infounitString필수구분(어휘, 품사, 공통 문형, 의미)
+lexical_infotypeString필수유형
+lexical_infolink_target_codeString필수링크 대상 코드(어휘 : target_code, 품사 : pos_code, 공통 문형 : comm_pattern_code, 의미 : sense_code)
+lexical_infolinkString필수링크
+word_infopos_info-필수품사 항목을 포함하는 컨테이너
+pos_infopos_codeString필수픔사 대상 코드
+pos_infoposString필수픔사
+pos_infolexical_info-필수어휘 관계를 포함하는 컨테이너
+lexical_infowordString필수표제어
+lexical_infounitString필수구분(어휘, 품사, 공통 문형, 의미)
+lexical_infotypeString필수유형
+lexical_infolink_target_codeString필수링크 대상 코드(어휘 : target_code, 품사 : pos_code, 공통 문형 : comm_pattern_code, 의미 : sense_code)
+lexical_infolinkString필수링크
+pos_infocomm_pattern_info-필수공통 문형 항목을 포함하는 컨테이너
+comm_pattern_infocomm_pattern_codeString필수공통 문형 대상 코드
+comm_pattern_infopattern_info-필수문형 항목을 포함하는 컨테이너
+pattern_infopatternString필수문형
+comm_pattern_infogrammar_info-필수문법 항목을 포함하는 컨테이너
+grammar_infogrammarString필수문법
+comm_pattern_infolexical_info-필수어휘 관계를 포함하는 컨테이너
+lexical_infowordString필수표제어
+lexical_infounitString필수구분(어휘, 품사, 공통 문형, 의미)
+lexical_infotypeString필수유형
+lexical_infolink_target_codeString필수링크 대상 코드(어휘 : target_code, 품사 : pos_code, 공통 문형 : comm_pattern_code, 의미 : sense_code)
+lexical_infolinkString필수링크
+comm_pattern_infosense_info-필수의미 항목을 포함하는 컨테이너
+sense_infosense_codeString필수의미 대상 코드
+sense_infotypeString필수범주
+sense_infodefinitionString필수뜻풀이
+sense_infodefinition_originalString필수뜻풀이(어휘 링크 포함)
+sense_infoscientific_nameString필수학명
+sense_infosense_pattern_info-필수문형 항목을 포함하는 컨테이너
+sense_pattern_infopatternString필수문형
+sense_infosense_grammar_info-필수문법 항목을 포함하는 컨테이너
+sense_grammar_infogrammarString필수문법
+sense_infocat_info-필수전문 분야 항목을 포함하는 컨테이너
+cat_infocatString필수전문 분야
+sense_infoexample_info-필수용례 항목을 포함하는 컨테이너
+example_infoexampleString필수용례
+example_infosourceString필수출전
+example_infooriginString필수원문
+example_infotranslationString필수번역
+sense_infotranslation_info-필수대역어 항목을 포함하는 컨테이너
+translation_infotranslationString필수대역
+translation_infolanguage_typeString필수언어
+sense_infomultimedia_info-필수멀티미디어 항목을 포함하는 컨테이너
+multimedia_infolabelString필수제목
+multimedia_infotypeString필수유형
+multimedia_infolinkString필수링크
+sense_infolexical_info-필수어휘 관계를 포함하는 컨테이너
+lexical_infowordString필수표제어
+lexical_infounitString필수구분(어휘, 품사, 공통 문형, 의미)
+lexical_infotypeString필수유형
+lexical_infolink_target_codeString필수링크 대상 코드(어휘 : target_code, 품사 : pos_code, 공통 문형 : comm_pattern_code, 의미 : sense_code)
+lexical_infolinkString필수링크
+- 검색 에러 메시지(error message)
+검색 에러 메시지 설명에러 코드에러 메시지설명
+000System error시스템 에러
+020Unregistered key등록되지 않은 키
+021Your key is temporary unavailable일시적으로 사용 중지된 인증 키
+100Incorrect query request부적절한 쿼리 요청. query 필드 자체가 없는 경우에 발생하는 에러 메시지
+102Invalid method value부적절한 검색 방식
+- 검색 출력 메시지 XML 예시
+
+ <?xml version="1.0" encoding="UTF-8" ?>
+ <xml version="2.0">
+ <channel>
+ <title> 표준 국어 대사전 개발 지원(Open API) - 사전 검색 </title>
+ <link> https://stdict.korean.go.kr </link>
+ <description> 표준 국어 대사전 개발 지원(Open API) – 사전 검색 결과 </description>
+ <lastBuildDate>2</lastBuildDate>
+ <total>1</total>
+ <item>
+ <target_code>404765</target_code>
+ <word_info>
+ <word>나무</word>
+ <word_unit>단어</word_unit>
+ <word_type>고유어</word_type>
+ </word_info>
+ <pos_info>
+ <pos>명사</pos>
+ <comm_pattern_info>
+ <sense_info>
+ <type>일반어</type>
+ <definition>줄기나 가지가 목질로 된 여러해살이 식물.</definition>
+ <example_info>
+ <example>나무가 우거진 산.</example>
+ </example_info>
+ <example_info>
+ <example>나무가 울창한 숲.</example>
+ </example_info>
+ </sense_info>
+ </comm_pattern_info>
+ </pos_info>
+ </item>
+ </channel>
+ </xml> 
+ 
+- 검색 출력 메시지 XML 예시
+검색 에러 메시지 설명에러 메시지 XML 구조에러 메시지 XML 예시
+<?xml version="1.0" encoding="UTF-8" ?>
+<error>
+<error_code>에러 코드</error_code>
+<message>에러 메시지 </message>
+</error>
+
+<?xml version="1.0" encoding="UTF-8" ?>
+<error>
+<error_code>020</error_code>
+<message>Unregistered key </message>
+</error>
+
+- 검색 출력 메시지 JSON 예시
+
+{
+ "channel": {
+ "title": "표준 국어 대사전 개발 지원(Open API) - 사전 검색 ",
+ "link": "https://stdict.korean.go.kr ",
+ "description": "표준 국어 대사전 개발 지원(Open API) – 사전 검색 결과 ",
+ "lastbuilddate": 2,
+ "total": 1,
+ "item": {
+ "target_code": 404765,
+ "word_info": {
+ "word": "나무",
+ "word_unit": "단어",
+ "word_type": "고유어"
+ },
+ "pos_info": {
+ "pos": "명사",
+ "comm_pattern_info": {
+ "sense_info": {
+ "type": "일반어",
+ "definition": "줄기나 가지가 목질로 된 여러해살이 식물.",
+ "example_info": [
+ {
+ "example": "나무가 우거진 산."
+ },
+ {
+ "example": "나무가 울창한 숲."
+ }
+ ]
+ }
+ }
+ }
+ }
+ }
+}
+ - 검색 출력 메시지 JSON 예시
+검색 에러 메시지 설명에러 메시지 JSON 구조에러 메시지 JSON 예시
+{
+"error": {
+"error_code": "에러 코드",
+"message": "에러 메시지 "
+}
+}
+
+{
+"error": {
+"error_code": 20,
+"message": "Unregistered key "
+}
+}
+
+따로보기자세히 찾기알립니다pc화면우리말샘
+
+도움말이용 약관개인 정보 처리 방침저작권 정책알립니다개발 지원(Open API)서비스 장애 신고사전 통계
+국립국어원우리말샘근현대 국어사전한국어기초사전한국수어사전이동
+
